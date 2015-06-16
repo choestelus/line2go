@@ -1,0 +1,506 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="style.css" rel="stylesheet" type="text/css"/>
+<title>Thrift module: line</title></head><body>
+<div class="container-fluid">
+<h1>Thrift module: line</h1>
+<table class="table-bordered table-striped table-condensed"><thead><th>Module</th><th>Services</th><th>Data types</th><th>Constants</th></thead>
+<tr>
+<td>line</td><td><a href="#Svc_TalkService">TalkService</a><br/>
+<ul>
+<li><a href="#Fn_TalkService_acceptGroupInvitation">acceptGroupInvitation</a></li>
+<li><a href="#Fn_TalkService_fetchOperations">fetchOperations</a></li>
+<li><a href="#Fn_TalkService_getAllContactIds">getAllContactIds</a></li>
+<li><a href="#Fn_TalkService_getContact">getContact</a></li>
+<li><a href="#Fn_TalkService_getContacts">getContacts</a></li>
+<li><a href="#Fn_TalkService_getGroup">getGroup</a></li>
+<li><a href="#Fn_TalkService_getGroupIdsInvited">getGroupIdsInvited</a></li>
+<li><a href="#Fn_TalkService_getGroupIdsJoined">getGroupIdsJoined</a></li>
+<li><a href="#Fn_TalkService_getGroups">getGroups</a></li>
+<li><a href="#Fn_TalkService_getLastOpRevision">getLastOpRevision</a></li>
+<li><a href="#Fn_TalkService_getMessageBoxCompactWrapUpList">getMessageBoxCompactWrapUpList</a></li>
+<li><a href="#Fn_TalkService_getPreviousMessages">getPreviousMessages</a></li>
+<li><a href="#Fn_TalkService_getProfile">getProfile</a></li>
+<li><a href="#Fn_TalkService_getRecentMessages">getRecentMessages</a></li>
+<li><a href="#Fn_TalkService_getRoom">getRoom</a></li>
+<li><a href="#Fn_TalkService_leaveGroup">leaveGroup</a></li>
+<li><a href="#Fn_TalkService_leaveRoom">leaveRoom</a></li>
+<li><a href="#Fn_TalkService_loginWithIdentityCredentialForCertificate">loginWithIdentityCredentialForCertificate</a></li>
+<li><a href="#Fn_TalkService_loginWithVerifierForCertificate">loginWithVerifierForCertificate</a></li>
+<li><a href="#Fn_TalkService_rejectGroupInvitation">rejectGroupInvitation</a></li>
+<li><a href="#Fn_TalkService_sendMessage">sendMessage</a></li>
+<li><a href="#Fn_TalkService_updateContactSetting">updateContactSetting</a></li>
+</ul>
+</td>
+<td><a href="#Struct_Contact">Contact</a><br/>
+<a href="#Enum_ContactSetting">ContactSetting</a><br/>
+<a href="#Enum_ContactStatus">ContactStatus</a><br/>
+<a href="#Enum_ContentType">ContentType</a><br/>
+<a href="#Enum_ErrorCode">ErrorCode</a><br/>
+<a href="#Struct_Group">Group</a><br/>
+<a href="#Enum_IdentityProvider">IdentityProvider</a><br/>
+<a href="#Struct_Location">Location</a><br/>
+<a href="#Struct_LoginResult">LoginResult</a><br/>
+<a href="#Enum_LoginResultType">LoginResultType</a><br/>
+<a href="#Enum_MIDType">MIDType</a><br/>
+<a href="#Struct_Message">Message</a><br/>
+<a href="#Struct_MessageBox">MessageBox</a><br/>
+<a href="#Struct_MessageBoxWrapUp">MessageBoxWrapUp</a><br/>
+<a href="#Struct_MessageBoxWrapUpList">MessageBoxWrapUpList</a><br/>
+<a href="#Enum_OpType">OpType</a><br/>
+<a href="#Struct_Operation">Operation</a><br/>
+<a href="#Struct_Profile">Profile</a><br/>
+<a href="#Struct_Room">Room</a><br/>
+<a href="#Struct_TalkException">TalkException</a><br/>
+</td>
+<td></code></td>
+</tr></table>
+<hr/><h2 id="Enumerations">Enumerations</h2>
+<div class="definition"><h3 id="Enum_ContactSetting">Enumeration: ContactSetting</h3>
+<br/><table class="table-bordered table-striped table-condensed">
+<tr><td><code>CONTACT_SETTING_DELETE</code></td><td><code>16</code></td><td>
+</td></tr>
+</table></div>
+<div class="definition"><h3 id="Enum_ContactStatus">Enumeration: ContactStatus</h3>
+<br/><table class="table-bordered table-striped table-condensed">
+<tr><td><code>FRIEND</code></td><td><code>1</code></td><td>
+</td></tr>
+<tr><td><code>FRIEND_BLOCKED</code></td><td><code>2</code></td><td>
+</td></tr>
+<tr><td><code>RECOMMEND_BLOCKED</code></td><td><code>4</code></td><td>
+</td></tr>
+<tr><td><code>DELETED</code></td><td><code>5</code></td><td>
+</td></tr>
+<tr><td><code>DELETED_BLOCKED</code></td><td><code>6</code></td><td>
+</td></tr>
+</table></div>
+<div class="definition"><h3 id="Enum_ContentType">Enumeration: ContentType</h3>
+<br/><table class="table-bordered table-striped table-condensed">
+<tr><td><code>NONE</code></td><td><code>0</code></td><td>
+</td></tr>
+<tr><td><code>IMAGE</code></td><td><code>1</code></td><td>
+</td></tr>
+<tr><td><code>VIDEO</code></td><td><code>2</code></td><td>
+</td></tr>
+<tr><td><code>AUDIO</code></td><td><code>3</code></td><td>
+</td></tr>
+<tr><td><code>STICKER</code></td><td><code>7</code></td><td>
+</td></tr>
+<tr><td><code>LOCATION</code></td><td><code>15</code></td><td>
+</td></tr>
+</table></div>
+<div class="definition"><h3 id="Enum_ErrorCode">Enumeration: ErrorCode</h3>
+<br/><table class="table-bordered table-striped table-condensed">
+<tr><td><code>ILLEGAL_ARGUMENT</code></td><td><code>0</code></td><td>
+</td></tr>
+<tr><td><code>AUTHENTICATION_FAILED</code></td><td><code>1</code></td><td>
+</td></tr>
+<tr><td><code>DB_FAILED</code></td><td><code>2</code></td><td>
+</td></tr>
+<tr><td><code>INVALID_STATE</code></td><td><code>3</code></td><td>
+</td></tr>
+<tr><td><code>EXCESSIVE_ACCESS</code></td><td><code>4</code></td><td>
+</td></tr>
+<tr><td><code>NOT_FOUND</code></td><td><code>5</code></td><td>
+</td></tr>
+<tr><td><code>INVALID_LENGTH</code></td><td><code>6</code></td><td>
+</td></tr>
+<tr><td><code>NOT_AVAILABLE_USER</code></td><td><code>7</code></td><td>
+</td></tr>
+<tr><td><code>NOT_AUTHORIZED_DEVICE</code></td><td><code>8</code></td><td>
+</td></tr>
+<tr><td><code>INVALID_MID</code></td><td><code>9</code></td><td>
+</td></tr>
+<tr><td><code>NOT_A_MEMBER</code></td><td><code>10</code></td><td>
+</td></tr>
+<tr><td><code>INCOMPATIBLE_APP_VERSION</code></td><td><code>11</code></td><td>
+</td></tr>
+<tr><td><code>NOT_READY</code></td><td><code>12</code></td><td>
+</td></tr>
+<tr><td><code>NOT_AVAILABLE_SESSION</code></td><td><code>13</code></td><td>
+</td></tr>
+<tr><td><code>NOT_AUTHORIZED_SESSION</code></td><td><code>14</code></td><td>
+</td></tr>
+<tr><td><code>SYSTEM_ERROR</code></td><td><code>15</code></td><td>
+</td></tr>
+<tr><td><code>NO_AVAILABLE_VERIFICATION_METHOD</code></td><td><code>16</code></td><td>
+</td></tr>
+<tr><td><code>NOT_AUTHENTICATED</code></td><td><code>17</code></td><td>
+</td></tr>
+<tr><td><code>INVALID_IDENTITY_CREDENTIAL</code></td><td><code>18</code></td><td>
+</td></tr>
+<tr><td><code>NOT_AVAILABLE_IDENTITY_IDENTIFIER</code></td><td><code>19</code></td><td>
+</td></tr>
+<tr><td><code>INTERNAL_ERROR</code></td><td><code>20</code></td><td>
+</td></tr>
+<tr><td><code>NO_SUCH_IDENTITY_IDENFIER</code></td><td><code>21</code></td><td>
+</td></tr>
+<tr><td><code>DEACTIVATED_ACCOUNT_BOUND_TO_THIS_IDENTITY</code></td><td><code>22</code></td><td>
+</td></tr>
+<tr><td><code>ILLEGAL_IDENTITY_CREDENTIAL</code></td><td><code>23</code></td><td>
+</td></tr>
+<tr><td><code>UNKNOWN_CHANNEL</code></td><td><code>24</code></td><td>
+</td></tr>
+<tr><td><code>NO_SUCH_MESSAGE_BOX</code></td><td><code>25</code></td><td>
+</td></tr>
+<tr><td><code>NOT_AVAILABLE_MESSAGE_BOX</code></td><td><code>26</code></td><td>
+</td></tr>
+<tr><td><code>CHANNEL_DOES_NOT_MATCH</code></td><td><code>27</code></td><td>
+</td></tr>
+<tr><td><code>NOT_YOUR_MESSAGE</code></td><td><code>28</code></td><td>
+</td></tr>
+<tr><td><code>MESSAGE_DEFINED_ERROR</code></td><td><code>29</code></td><td>
+</td></tr>
+<tr><td><code>USER_CANNOT_ACCEPT_PRESENTS</code></td><td><code>30</code></td><td>
+</td></tr>
+<tr><td><code>USER_NOT_STICKER_OWNER</code></td><td><code>32</code></td><td>
+</td></tr>
+<tr><td><code>MAINTENANCE_ERROR</code></td><td><code>33</code></td><td>
+</td></tr>
+<tr><td><code>ACCOUNT_NOT_MATCHED</code></td><td><code>34</code></td><td>
+</td></tr>
+<tr><td><code>ABUSE_BLOCK</code></td><td><code>35</code></td><td>
+</td></tr>
+<tr><td><code>NOT_FRIEND</code></td><td><code>36</code></td><td>
+</td></tr>
+<tr><td><code>NOT_ALLOWED_CALL</code></td><td><code>37</code></td><td>
+</td></tr>
+<tr><td><code>BLOCK_FRIEND</code></td><td><code>38</code></td><td>
+</td></tr>
+<tr><td><code>INCOMPATIBLE_VOIP_VERSION</code></td><td><code>39</code></td><td>
+</td></tr>
+<tr><td><code>INVALID_SNS_ACCESS_TOKEN</code></td><td><code>40</code></td><td>
+</td></tr>
+<tr><td><code>EXTERNAL_SERVICE_NOT_AVAILABLE</code></td><td><code>41</code></td><td>
+</td></tr>
+<tr><td><code>NOT_ALLOWED_ADD_CONTACT</code></td><td><code>42</code></td><td>
+</td></tr>
+<tr><td><code>NOT_CERTIFICATED</code></td><td><code>43</code></td><td>
+</td></tr>
+<tr><td><code>NOT_ALLOWED_SECONDARY_DEVICE</code></td><td><code>44</code></td><td>
+</td></tr>
+<tr><td><code>INVALID_PIN_CODE</code></td><td><code>45</code></td><td>
+</td></tr>
+<tr><td><code>NOT_FOUND_IDENTITY_CREDENTIAL</code></td><td><code>46</code></td><td>
+</td></tr>
+<tr><td><code>EXCEED_FILE_MAX_SIZE</code></td><td><code>47</code></td><td>
+</td></tr>
+<tr><td><code>EXCEED_DAILY_QUOTA</code></td><td><code>48</code></td><td>
+</td></tr>
+<tr><td><code>NOT_SUPPORT_SEND_FILE</code></td><td><code>49</code></td><td>
+</td></tr>
+<tr><td><code>MUST_UPGRADE</code></td><td><code>50</code></td><td>
+</td></tr>
+<tr><td><code>NOT_AVAILABLE_PIN_CODE_SESSION</code></td><td><code>51</code></td><td>
+</td></tr>
+</table></div>
+<div class="definition"><h3 id="Enum_IdentityProvider">Enumeration: IdentityProvider</h3>
+<br/><table class="table-bordered table-striped table-condensed">
+<tr><td><code>LINE</code></td><td><code>1</code></td><td>
+</td></tr>
+</table></div>
+<div class="definition"><h3 id="Enum_LoginResultType">Enumeration: LoginResultType</h3>
+<br/><table class="table-bordered table-striped table-condensed">
+<tr><td><code>SUCCESS</code></td><td><code>1</code></td><td>
+</td></tr>
+<tr><td><code>REQUIRE_DEVICE_CONFIRM</code></td><td><code>3</code></td><td>
+</td></tr>
+</table></div>
+<div class="definition"><h3 id="Enum_MIDType">Enumeration: MIDType</h3>
+<br/><table class="table-bordered table-striped table-condensed">
+<tr><td><code>USER</code></td><td><code>0</code></td><td>
+</td></tr>
+<tr><td><code>ROOM</code></td><td><code>1</code></td><td>
+</td></tr>
+<tr><td><code>GROUP</code></td><td><code>2</code></td><td>
+</td></tr>
+</table></div>
+<div class="definition"><h3 id="Enum_OpType">Enumeration: OpType</h3>
+<br/><table class="table-bordered table-striped table-condensed">
+<tr><td><code>END_OF_OPERATION</code></td><td><code>0</code></td><td>
+</td></tr>
+<tr><td><code>UPDATE_PROFILE</code></td><td><code>1</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_UPDATE_PROFILE</code></td><td><code>2</code></td><td>
+</td></tr>
+<tr><td><code>REGISTER_USERID</code></td><td><code>3</code></td><td>
+</td></tr>
+<tr><td><code>ADD_CONTACT</code></td><td><code>4</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_ADD_CONTACT</code></td><td><code>5</code></td><td>
+</td></tr>
+<tr><td><code>BLOCK_CONTACT</code></td><td><code>6</code></td><td>
+</td></tr>
+<tr><td><code>UNBLOCK_CONTACT</code></td><td><code>7</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_RECOMMEND_CONTACT</code></td><td><code>8</code></td><td>
+</td></tr>
+<tr><td><code>CREATE_GROUP</code></td><td><code>9</code></td><td>
+</td></tr>
+<tr><td><code>UPDATE_GROUP</code></td><td><code>10</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_UPDATE_GROUP</code></td><td><code>11</code></td><td>
+</td></tr>
+<tr><td><code>INVITE_INTO_GROUP</code></td><td><code>12</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_INVITE_INTO_GROUP</code></td><td><code>13</code></td><td>
+</td></tr>
+<tr><td><code>LEAVE_GROUP</code></td><td><code>14</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_LEAVE_GROUP</code></td><td><code>15</code></td><td>
+</td></tr>
+<tr><td><code>ACCEPT_GROUP_INVITATION</code></td><td><code>16</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_ACCEPT_GROUP_INVITATION</code></td><td><code>17</code></td><td>
+</td></tr>
+<tr><td><code>KICKOUT_FROM_GROUP</code></td><td><code>18</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_KICKOUT_FROM_GROUP</code></td><td><code>19</code></td><td>
+</td></tr>
+<tr><td><code>CREATE_ROOM</code></td><td><code>20</code></td><td>
+</td></tr>
+<tr><td><code>INVITE_INTO_ROOM</code></td><td><code>21</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_INVITE_INTO_ROOM</code></td><td><code>22</code></td><td>
+</td></tr>
+<tr><td><code>LEAVE_ROOM</code></td><td><code>23</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_LEAVE_ROOM</code></td><td><code>24</code></td><td>
+</td></tr>
+<tr><td><code>SEND_MESSAGE</code></td><td><code>25</code></td><td>
+</td></tr>
+<tr><td><code>RECEIVE_MESSAGE</code></td><td><code>26</code></td><td>
+</td></tr>
+<tr><td><code>SEND_MESSAGE_RECEIPT</code></td><td><code>27</code></td><td>
+</td></tr>
+<tr><td><code>RECEIVE_MESSAGE_RECEIPT</code></td><td><code>28</code></td><td>
+</td></tr>
+<tr><td><code>SEND_CONTENT_RECEIPT</code></td><td><code>29</code></td><td>
+</td></tr>
+<tr><td><code>RECEIVE_ANNOUNCEMENT</code></td><td><code>30</code></td><td>
+</td></tr>
+<tr><td><code>CANCEL_INVITATION_GROUP</code></td><td><code>31</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_CANCEL_INVITATION_GROUP</code></td><td><code>32</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_UNREGISTER_USER</code></td><td><code>33</code></td><td>
+</td></tr>
+<tr><td><code>REJECT_GROUP_INVITATION</code></td><td><code>34</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_REJECT_GROUP_INVITATION</code></td><td><code>35</code></td><td>
+</td></tr>
+<tr><td><code>UPDATE_SETTINGS</code></td><td><code>36</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_REGISTER_USER</code></td><td><code>37</code></td><td>
+</td></tr>
+<tr><td><code>INVITE_VIA_EMAIL</code></td><td><code>38</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_REQUEST_RECOVERY</code></td><td><code>39</code></td><td>
+</td></tr>
+<tr><td><code>SEND_CHAT_CHECKED</code></td><td><code>40</code></td><td>
+</td></tr>
+<tr><td><code>SEND_CHAT_REMOVED</code></td><td><code>41</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_FORCE_SYNC</code></td><td><code>42</code></td><td>
+</td></tr>
+<tr><td><code>SEND_CONTENT</code></td><td><code>43</code></td><td>
+</td></tr>
+<tr><td><code>SEND_MESSAGE_MYHOME</code></td><td><code>44</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_UPDATE_CONTENT_PREVIEW</code></td><td><code>45</code></td><td>
+</td></tr>
+<tr><td><code>REMOVE_ALL_MESSAGES</code></td><td><code>46</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_UPDATE_PURCHASES</code></td><td><code>47</code></td><td>
+</td></tr>
+<tr><td><code>DUMMY</code></td><td><code>48</code></td><td>
+</td></tr>
+<tr><td><code>UPDATE_CONTACT</code></td><td><code>49</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_RECEIVED_CALL</code></td><td><code>50</code></td><td>
+</td></tr>
+<tr><td><code>CANCEL_CALL</code></td><td><code>51</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_REDIRECT</code></td><td><code>52</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_CHANNEL_SYNC</code></td><td><code>53</code></td><td>
+</td></tr>
+<tr><td><code>FAILED_SEND_MESSAGE</code></td><td><code>54</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_READ_MESSAGE</code></td><td><code>55</code></td><td>
+</td></tr>
+<tr><td><code>FAILED_EMAIL_CONFIRMATION</code></td><td><code>56</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_CHAT_CONTENT</code></td><td><code>58</code></td><td>
+</td></tr>
+<tr><td><code>NOTIFIED_PUSH_NOTICENTER_ITEM</code></td><td><code>59</code></td><td>
+</td></tr>
+</table></div>
+<hr/><h2 id="Structs">Data structures</h2>
+<div class="definition"><h3 id="Struct_Contact">Struct: Contact</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>mid</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>11</td><td>status</td><td><code><a href="line.html#Enum_ContactStatus">ContactStatus</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>22</td><td>displayName</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>26</td><td>statusMessage</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>35</td><td>attributes</td><td><code>i32</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>37</td><td>picturePath</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+</table><br/></div><div class="definition"><h3 id="Struct_Group">Struct: Group</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>id</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>10</td><td>name</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>20</td><td>members</td><td><code>list&lt;<code><a href="line.html#Struct_Contact">Contact</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>21</td><td>creator</td><td><code><a href="line.html#Struct_Contact">Contact</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>22</td><td>invitee</td><td><code>list&lt;<code><a href="line.html#Struct_Contact">Contact</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+</table><br/></div><div class="definition"><h3 id="Struct_Location">Struct: Location</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>title</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>address</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>3</td><td>latitude</td><td><code>double</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>4</td><td>longitude</td><td><code>double</code></td><td></td><td>default</td><td></td></tr>
+</table><br/></div><div class="definition"><h3 id="Struct_LoginResult">Struct: LoginResult</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>authToken</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>certificate</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>3</td><td>verifier</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>4</td><td>pinCode</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>5</td><td>type</td><td><code><a href="line.html#Enum_LoginResultType">LoginResultType</a></code></td><td></td><td>default</td><td></td></tr>
+</table><br/></div><div class="definition"><h3 id="Struct_Message">Struct: Message</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>from</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>to</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>3</td><td>toType</td><td><code><a href="line.html#Enum_MIDType">MIDType</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>4</td><td>id</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>5</td><td>createdTime</td><td><code>i64</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>10</td><td>text</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>11</td><td>location</td><td><code><a href="line.html#Struct_Location">Location</a></code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>15</td><td>contentType</td><td><code><a href="line.html#Enum_ContentType">ContentType</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>17</td><td>contentPreview</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>18</td><td>contentMetadata</td><td><code>map&lt;<code>string</code>, <code>string</code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+</table><br/></div><div class="definition"><h3 id="Struct_MessageBox">Struct: MessageBox</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>id</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>9</td><td>midType</td><td><code><a href="line.html#Enum_MIDType">MIDType</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>10</td><td>lastMessages</td><td><code>list&lt;<code><a href="line.html#Struct_Message">Message</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+</table><br/></div><div class="definition"><h3 id="Struct_MessageBoxWrapUp">Struct: MessageBoxWrapUp</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>messageBox</td><td><code><a href="line.html#Struct_MessageBox">MessageBox</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>3</td><td>contacts</td><td><code>list&lt;<code><a href="line.html#Struct_Contact">Contact</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+</table><br/></div><div class="definition"><h3 id="Struct_MessageBoxWrapUpList">Struct: MessageBoxWrapUpList</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>messageBoxWrapUpList</td><td><code>list&lt;<code><a href="line.html#Struct_MessageBoxWrapUp">MessageBoxWrapUp</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+</table><br/></div><div class="definition"><h3 id="Struct_Operation">Struct: Operation</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>revision</td><td><code>i64</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>createdTime</td><td><code>i64</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>3</td><td>type</td><td><code><a href="line.html#Enum_OpType">OpType</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>4</td><td>reqSeq</td><td><code>i32</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>10</td><td>param1</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>11</td><td>param2</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>12</td><td>param3</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>20</td><td>message</td><td><code><a href="line.html#Struct_Message">Message</a></code></td><td></td><td>default</td><td></td></tr>
+</table><br/></div><div class="definition"><h3 id="Struct_Profile">Struct: Profile</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>mid</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>20</td><td>displayName</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>24</td><td>statusMessage</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>33</td><td>picturePath</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+</table><br/></div><div class="definition"><h3 id="Struct_Room">Struct: Room</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>mid</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>10</td><td>contacts</td><td><code>list&lt;<code><a href="line.html#Struct_Contact">Contact</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+</table><br/></div><div class="definition"><h3 id="Struct_TalkException">Exception: TalkException</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>code</td><td><code><a href="line.html#Enum_ErrorCode">ErrorCode</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>reason</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+</table><br/></div><hr/><h2 id="Services">Services</h2>
+<h3 id="Svc_TalkService">Service: TalkService</h3>
+<div class="definition"><h4 id="Fn_TalkService_acceptGroupInvitation">Function: TalkService.acceptGroupInvitation</h4>
+<pre><code>void</code> acceptGroupInvitation(<code>i32</code> reqSeq,
+                           <code>string</code> groupId)
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_fetchOperations">Function: TalkService.fetchOperations</h4>
+<pre><code>list&lt;<code><a href="line.html#Struct_Operation">Operation</a></code>&gt;</code> fetchOperations(<code>i64</code> localRev,
+                                <code>i32</code> count)
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_getAllContactIds">Function: TalkService.getAllContactIds</h4>
+<pre><code>list&lt;<code>string</code>&gt;</code> getAllContactIds()
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_getContact">Function: TalkService.getContact</h4>
+<pre><code><a href="line.html#Struct_Contact">Contact</a></code> getContact(<code>string</code> id)
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_getContacts">Function: TalkService.getContacts</h4>
+<pre><code>list&lt;<code><a href="line.html#Struct_Contact">Contact</a></code>&gt;</code> getContacts(<code>list&lt;<code>string</code>&gt;</code> ids)
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_getGroup">Function: TalkService.getGroup</h4>
+<pre><code><a href="line.html#Struct_Group">Group</a></code> getGroup(<code>string</code> groupId)
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_getGroupIdsInvited">Function: TalkService.getGroupIdsInvited</h4>
+<pre><code>list&lt;<code>string</code>&gt;</code> getGroupIdsInvited()
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_getGroupIdsJoined">Function: TalkService.getGroupIdsJoined</h4>
+<pre><code>list&lt;<code>string</code>&gt;</code> getGroupIdsJoined()
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_getGroups">Function: TalkService.getGroups</h4>
+<pre><code>list&lt;<code><a href="line.html#Struct_Group">Group</a></code>&gt;</code> getGroups(<code>list&lt;<code>string</code>&gt;</code> groupIds)
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_getLastOpRevision">Function: TalkService.getLastOpRevision</h4>
+<pre><code>i64</code> getLastOpRevision()
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_getMessageBoxCompactWrapUpList">Function: TalkService.getMessageBoxCompactWrapUpList</h4>
+<pre><code><a href="line.html#Struct_MessageBoxWrapUpList">MessageBoxWrapUpList</a></code> getMessageBoxCompactWrapUpList(<code>i32</code> start,
+                                                    <code>i32</code> messageBoxCount)
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_getPreviousMessages">Function: TalkService.getPreviousMessages</h4>
+<pre><code>list&lt;<code><a href="line.html#Struct_Message">Message</a></code>&gt;</code> getPreviousMessages(<code>string</code> messageBoxId,
+                                  <code>i64</code> endSeq,
+                                  <code>i32</code> messagesCount)
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_getRecentMessages">Function: TalkService.getRecentMessages</h4>
+<pre><code>list&lt;<code><a href="line.html#Struct_Message">Message</a></code>&gt;</code> getRecentMessages(<code>string</code> messageBoxId,
+                                <code>i32</code> messagesCount)
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_getRoom">Function: TalkService.getRoom</h4>
+<pre><code><a href="line.html#Struct_Room">Room</a></code> getRoom(<code>string</code> roomId)
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_loginWithIdentityCredentialForCertificate">Function: TalkService.loginWithIdentityCredentialForCertificate</h4>
+<pre><code><a href="line.html#Struct_LoginResult">LoginResult</a></code> loginWithIdentityCredentialForCertificate(<code><a href="line.html#Enum_IdentityProvider">IdentityProvider</a></code> identityProvider,
+                                                      <code>string</code> identifier,
+                                                      <code>string</code> password,
+                                                      <code>bool</code> keepLoggedIn,
+                                                      <code>string</code> accessLocation,
+                                                      <code>string</code> systemName,
+                                                      <code>string</code> certificate)
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_loginWithVerifierForCertificate">Function: TalkService.loginWithVerifierForCertificate</h4>
+<pre><code><a href="line.html#Struct_LoginResult">LoginResult</a></code> loginWithVerifierForCertificate(<code>string</code> verifier)
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_leaveGroup">Function: TalkService.leaveGroup</h4>
+<pre><code>void</code> leaveGroup(<code>i32</code> reqSeq,
+                <code>string</code> groupId)
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_leaveRoom">Function: TalkService.leaveRoom</h4>
+<pre><code>void</code> leaveRoom(<code>i32</code> reqSeq,
+               <code>string</code> roomId)
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_getProfile">Function: TalkService.getProfile</h4>
+<pre><code><a href="line.html#Struct_Profile">Profile</a></code> getProfile()
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_rejectGroupInvitation">Function: TalkService.rejectGroupInvitation</h4>
+<pre><code>void</code> rejectGroupInvitation(<code>i32</code> reqSeq,
+                           <code>string</code> groupId)
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_sendMessage">Function: TalkService.sendMessage</h4>
+<pre><code><a href="line.html#Struct_Message">Message</a></code> sendMessage(<code>i32</code> seq,
+                    <code><a href="line.html#Struct_Message">Message</a></code> message)
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div><div class="definition"><h4 id="Fn_TalkService_updateContactSetting">Function: TalkService.updateContactSetting</h4>
+<pre><code>void</code> updateContactSetting(<code>i32</code> reqSeq,
+                          <code>string</code> mid,
+                          <code><a href="line.html#Enum_ContactSetting">ContactSetting</a></code> flag,
+                          <code>string</code> value)
+    throws <code><a href="line.html#Struct_TalkException">TalkException</a></code>
+</pre></div></div></body></html>
