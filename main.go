@@ -11,10 +11,15 @@ import (
 var _ = thrift.ZERO
 var _ = fmt.Printf
 
+type ThriftClient struct {
+	*line.TalkServiceClient
+}
+
 func main() {
 	// var err error
 	var transport thrift.TTransport
 	var talkClient *line.TalkServiceClient
+	// var talkClient ThriftClient
 	urlPath := LineThriftServer + ":443" // + LineLoginPath
 
 	ident := "choestelus@gmail.com"
