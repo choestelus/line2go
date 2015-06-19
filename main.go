@@ -25,17 +25,20 @@ func main() {
 	if err2 != nil {
 		log.Fatalln("Error opening secure socket : ", err2)
 	}
+
 	transportFactory := thrift.NewTTransportFactory()
 	transport = transportFactory.GetTransport(transport)
 	if err := transport.Open(); err != nil {
 		log.Fatalln("could not open connection", err)
 	}
+	defer transport.Close()
+
 	talkClient = line.NewTalkServiceClientFactory(transport, thrift.NewTCompactProtocolFactory())
 
 	result, err := talkClient.LoginWithIdentityCredentialForCertificate(line.IdentityProvider_LINE, ident, pwd, true, "127.0.0.1", "goLINE", "emp")
 	if err != nil {
 		log.Fatalln("Error logging in: ", err)
 	}
+
 	log.Printf("result: %v", result)
-	defer transport.Close()
 }
