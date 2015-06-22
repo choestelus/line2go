@@ -16,19 +16,29 @@ type ThriftClient struct {
 }
 
 func main() {
-	// var err error
+	var err error
 	var transport thrift.TTransport
+	var httpTransport thrift.TTransport
 	var talkClient *line.TalkServiceClient
+
+	_ = httpTransport
 	// var talkClient ThriftClient
-	urlPath := LineThriftServer + ":443" // + LineLoginPath
+	urlPath := "http://" + LineThriftServer + ":443" + LineLoginPath
 
 	ident := "choestelus@gmail.com"
 	pwd := ""
 	cfg := new(tls.Config)
 	log.Printf("openning socket to: %v", urlPath)
-	transport, err2 := thrift.NewTSSLSocket(urlPath, cfg)
-	if err2 != nil {
-		log.Fatalln("Error opening secure socket : ", err2)
+
+	if UseHTTP {
+		log.Printf("using http protocol")
+		transport, err = thrift.NewTHttpClient(urlPath)
+	} else {
+		log.Printf("using secure socket layer")
+		transport, err = thrift.NewTSSLSocket(urlPath, cfg)
+	}
+	if err != nil {
+		log.Fatalln("Error opening secure socket : ", err)
 	}
 
 	transportFactory := thrift.NewTTransportFactory()
