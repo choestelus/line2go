@@ -41,7 +41,7 @@ func main() {
 
 	talkClient = line.NewTalkServiceClientFactory(wrappedTransport, thrift.NewTCompactProtocolFactory())
 
-	result, err := talkClient.LoginWithIdentityCredentialForCertificate(line.IdentityProvider_LINE, ident, pwd, true, "127.0.0.1", "goLINE", "emp")
+	result, err := talkClient.LoginWithIdentityCredentialForCertificate(line.IdentityProvider_LINE, ident, pwd, true, "127.0.0.1", "purple-line (LINE for libpurple/Pidgin)", "Pidgin")
 	if err != nil {
 		log.Println("Error logging in: ", err)
 	}
@@ -50,20 +50,21 @@ func main() {
 	fmt.Fprintf(ioutil.Discard, "result: %v", result)
 
 	greenBold := color.New(color.FgGreen).Add(color.Bold).SprintFunc()
+	yellowBold := color.New(color.FgYellow).Add(color.Bold).SprintfFunc()
 
 	req := gorequest.New() //.TLSClientConfig(&tls.Config{})
 	resp, body, errs := req.Post("http://"+LineThriftServer+LineLoginPath).
 		Set("connection", "keep-alive").
 		Set("Content-Type", "application/x-thrift").
 		Set("User-Agent", "purple-line (LINE for libpurple/pidgin)").
-		Set("X-Line-Application", "DESKTOPWIN\t3.2.1.83\tWINDOWS\t5.1.2600-XP-x64").
-		SendString(message.String()).
+		Set("X-Line-Application", "DESKTOPWIN\t3.2.1.83\t\tWINDOWS\t5.1.2600-XP-x64").
+		Send(message.Bytes()).
 		End()
 	if errs != nil {
 		log.Fatalf("Fatal : %v", errs)
 	}
 
-	log.Printf("status : %v code = [%v]\n", greenBold(resp.Status), greenBold(strconv.Itoa(resp.StatusCode)))
+	log.Printf("status : %v code = [%v]\n", yellowBold(resp.Status), yellowBold(strconv.Itoa(resp.StatusCode)))
 	log.Printf("resp = [%v]\n", resp.Header)
 	fmt.Printf("%v %v\nlength = [%v]\n", greenBold("respTLS: "), resp.TLS, resp.ContentLength)
 	fmt.Printf("%v%v\n", greenBold("------body------\n"), body)
