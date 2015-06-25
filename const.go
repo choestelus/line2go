@@ -12,6 +12,6 @@ const LinePollPath = "/P4"
 const LineShopPath = "/SHOP4"
 
 const LineUserAgent = "purple-line (LINE for libpurple/Pidgin)"
-const LineApplication = "DESKTOPWIN\t3.2.1.83\tWINDOWS\t5.1.2600-XP-x64"
+const LineApplication = "DESKTOPWIN\t3.2.1.83\t\tWINDOWS\t5.1.2600-XP-x64"
 
 const UseHTTP = false
