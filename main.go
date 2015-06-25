@@ -26,7 +26,7 @@ func main() {
 	httpTrans := httpTransport.(*thrift.THttpClient)
 
 	// set specific header
-	httpTrans.SetHeader("User-Agent", LineUserAgent)
+	httpTrans.SetHeader("User-Agent", AppUserAgent)
 	httpTrans.SetHeader("X-Line-Application", LineApplication)
 	httpTrans.SetHeader("connection", "keep-alive")
 
@@ -36,11 +36,12 @@ func main() {
 	talkClient = line.NewTalkServiceClientFactory(wrappedhttpTransport, thrift.NewTCompactProtocolFactory())
 
 	result, err := talkClient.
-		LoginWithIdentityCredentialForCertificate(line.IdentityProvider_LINE, ident, pwd, true, "127.0.0.1", LineUserAgent, "Pidgin")
+		LoginWithIdentityCredentialForCertificate(line.IdentityProvider_LINE, ident, pwd, true, "127.0.0.1", AppUserAgent, "Pidgin")
 	if err != nil {
 		log.Println("Error logging in: ", err)
 	}
 
 	prettyResult := fmt.Sprint(greenBold(result.String()))
-	log.Printf("result: %v\n", prettyResult)
+	log.Printf("Type: [%T], result: %v\n", result, prettyResult)
+	printLoginResult(result)
 }
