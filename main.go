@@ -15,25 +15,25 @@ func main() {
 
 	var err error
 	var loginClient *line.TalkServiceClient
-	var httpTransport thrift.TTransport
+	var loginTransport thrift.TTransport
 
 	ident := "choestelus@gmail.com"
 	pwd := "suchlinemuchwow@443"
 
-	httpTransport, _ = thrift.NewTHttpPostClient("https://" + LineThriftServer + LineLoginPath)
+	loginTransport, _ = thrift.NewTHttpPostClient("https://" + LineThriftServer + LineLoginPath)
 
 	// type assertion
-	httpTrans := httpTransport.(*thrift.THttpClient)
+	loginTrans := loginTransport.(*thrift.THttpClient)
 
 	// set specific header
-	httpTrans.SetHeader("User-Agent", AppUserAgent)
-	httpTrans.SetHeader("X-Line-Application", LineApplication)
-	httpTrans.SetHeader("connection", "keep-alive")
+	loginTrans.SetHeader("User-Agent", AppUserAgent)
+	loginTrans.SetHeader("X-Line-Application", LineApplication)
+	loginTrans.SetHeader("connection", "keep-alive")
 
 	transportFactory := thrift.NewTTransportFactory()
-	wrappedhttpTransport := transportFactory.GetTransport(httpTrans)
+	wrappedloginTransport := transportFactory.GetTransport(loginTrans)
 
-	loginClient = line.NewTalkServiceClientFactory(wrappedhttpTransport, thrift.NewTCompactProtocolFactory())
+	loginClient = line.NewTalkServiceClientFactory(wrappedloginTransport, thrift.NewTCompactProtocolFactory())
 
 	result, err := loginClient.
 		LoginWithIdentityCredentialForCertificate(line.IdentityProvider_LINE, ident, pwd, true, "127.0.0.1", AppUserAgent, "Pidgin")
