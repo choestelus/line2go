@@ -14,7 +14,7 @@ func main() {
 	greenBold := color.New(color.FgGreen).Add(color.Bold).SprintFunc()
 
 	var err error
-	var talkClient *line.TalkServiceClient
+	var loginClient *line.TalkServiceClient
 	var httpTransport thrift.TTransport
 
 	ident := "choestelus@gmail.com"
@@ -33,9 +33,9 @@ func main() {
 	transportFactory := thrift.NewTTransportFactory()
 	wrappedhttpTransport := transportFactory.GetTransport(httpTrans)
 
-	talkClient = line.NewTalkServiceClientFactory(wrappedhttpTransport, thrift.NewTCompactProtocolFactory())
+	loginClient = line.NewTalkServiceClientFactory(wrappedhttpTransport, thrift.NewTCompactProtocolFactory())
 
-	result, err := talkClient.
+	result, err := loginClient.
 		LoginWithIdentityCredentialForCertificate(line.IdentityProvider_LINE, ident, pwd, true, "127.0.0.1", AppUserAgent, "Pidgin")
 	if err != nil {
 		log.Println("Error logging in: ", err)
@@ -44,4 +44,8 @@ func main() {
 	prettyResult := fmt.Sprint(greenBold(result.String()))
 	log.Printf("Type: [%T], result: %v\n", result, prettyResult)
 	printLoginResult(result)
+
+	if result.GetTypeA1() == line.LoginResultType_REQUIRE_DEVICE_CONFIRM {
+		log.Fatalf("error: need pin verification; not handle yet")
+	}
 }
