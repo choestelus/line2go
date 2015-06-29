@@ -38,10 +38,19 @@ func main() {
 	transportFactory := thrift.NewTTransportFactory()
 	wrappedloginTransport := transportFactory.GetTransport(loginTrans)
 
-	loginClient = line.NewTalkServiceClientFactory(wrappedloginTransport, thrift.NewTCompactProtocolFactory())
+	loginClient = line.NewTalkServiceClientFactory(
+		wrappedloginTransport,
+		thrift.NewTCompactProtocolFactory())
 
-	result, err := loginClient.
-		LoginWithIdentityCredentialForCertificate(line.IdentityProvider_LINE, ident, pwd, true, "127.0.0.1", AppUserAgent, "Pidgin")
+	result, err := loginClient.LoginWithIdentityCredentialForCertificate(
+		line.IdentityProvider_LINE,
+		ident,
+		pwd,
+		true,
+		"127.0.0.1",
+		AppUserAgent,
+		"Pidgin")
+
 	if err != nil {
 		log.Fatalln("Error logging in: ", err)
 	}
@@ -53,5 +62,7 @@ func main() {
 	//TODO: handle pinverfication request
 	if result.GetTypeA1() == line.LoginResultType_REQUIRE_DEVICE_CONFIRM {
 		log.Fatalf("error: need pin verification; not handle yet")
+		// Code here:
+		// create blank http request
 	}
 }
