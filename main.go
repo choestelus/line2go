@@ -50,6 +50,7 @@ func main() {
 	log.Printf("Type: [%T], result: %v\n", result, prettyResult)
 	printLoginResult(result)
 
+	//TODO: handle pinverfication request
 	if result.GetTypeA1() == line.LoginResultType_REQUIRE_DEVICE_CONFIRM {
 		log.Fatalf("error: need pin verification; not handle yet")
 	}
