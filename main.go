@@ -9,6 +9,10 @@ import (
 	"log"
 )
 
+var (
+	token string
+)
+
 func main() {
 	fmt.Fprintf(ioutil.Discard, "")
 	greenBold := color.New(color.FgGreen).Add(color.Bold).SprintFunc()
@@ -20,7 +24,8 @@ func main() {
 	ident := "choestelus@gmail.com"
 	pwd := "suchlinemuchwow@443"
 
-	loginTransport, _ = thrift.NewTHttpPostClient("https://" + LineThriftServer + LineLoginPath)
+	url := "https://" + LineThriftServer + LineLoginPath
+	loginTransport, _ = thrift.NewTHttpPostClient(url)
 
 	// type assertion
 	loginTrans := loginTransport.(*thrift.THttpClient)
@@ -38,7 +43,7 @@ func main() {
 	result, err := loginClient.
 		LoginWithIdentityCredentialForCertificate(line.IdentityProvider_LINE, ident, pwd, true, "127.0.0.1", AppUserAgent, "Pidgin")
 	if err != nil {
-		log.Println("Error logging in: ", err)
+		log.Fatalln("Error logging in: ", err)
 	}
 
 	prettyResult := fmt.Sprint(greenBold(result.String()))
