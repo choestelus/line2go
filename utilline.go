@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	// "git.apache.org/thrift.git/lib/go/thrift"
 	"github.com/fatih/color"
 	"line"
 )
