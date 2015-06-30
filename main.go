@@ -20,15 +20,19 @@ func main() {
 	var err error
 	var loginClient *line.TalkServiceClient
 	var loginTransport thrift.TTransport
+	var commandTransport thrift.TTransport
 
 	ident := "choestelus@gmail.com"
 	pwd := "suchlinemuchwow@443"
 
 	url := "https://" + LineThriftServer + LineLoginPath
+	url2 := "https://" + LineThriftServer + LineCommandPath
 	loginTransport, _ = thrift.NewTHttpPostClient(url)
+	commandTransport, _ = thrift.NewTHttpPostClient(url2)
 
 	// type assertion
 	loginTrans := loginTransport.(*thrift.THttpClient)
+	commandTrans := commandTransport.(*thrift.THttpClient)
 
 	// set specific header
 	loginTrans.SetHeader("User-Agent", AppUserAgent)
@@ -54,6 +58,13 @@ func main() {
 	if err != nil {
 		log.Fatalln("Error logging in: ", err)
 	}
+	// proof that GetHeader is useless to get header from HTTP response messages.
+	//fmt.Printf("\ntest get-header: [%v]\n", loginClient.Transport.(*thrift.THttpClient).GetHeader("X-Line-Application"))
+	//fmt.Printf("\ntest get-header: [%v]\n", loginClient.Transport.(*thrift.THttpClient).GetHeader("X-Lcr"))
+
+	// Workaround: use this instead
+	// disclamier: น่าจะ Non thread-safe if there are more than 1 go-routine call using loginClient instance
+	fmt.Printf("\ntest get-header: [%v]\n", loginClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-Lcr"))
 
 	prettyResult := fmt.Sprint(greenBold(result.String()))
 	log.Printf("Type: [%T], result: %v\n", result, prettyResult)
