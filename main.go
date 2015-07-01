@@ -12,7 +12,8 @@ import (
 )
 
 var (
-	token string
+	token     string
+	Line_X_LS string
 )
 
 func main() {
@@ -82,15 +83,31 @@ func main() {
 
 	// Workaround: use this instead
 	// disclamier: น่าจะ Non thread-safe if there are more than 1 go-routine call using loginClient instance
-	fmt.Printf("\ntest get-header: [%v]\n", loginClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-Lcr"))
 
 	prettyResult := fmt.Sprint(greenBold(result.String()))
 	log.Printf("Type: [%T], result: %v\n", result, prettyResult)
 
 	printLoginResult(result)
 	fmt.Printf("GetLastOpRevision = %v\n", greenBold(strconv.FormatInt(lastOpRevision, 10)))
+	Line_X_LS = commandClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-LS")
+	fmt.Printf("\nX-LS: [%v]\n", cyanBold(Line_X_LS))
 
-	//TODO: handle pinverfication request
+	// TODO: add X-LS request header, remove other unused headers
+	commandClient.Transport.(*thrift.THttpClient).DelHeader("X-Line-Access")
+	commandClient.Transport.(*thrift.THttpClient).DelHeader("User-Agent")
+	commandClient.Transport.(*thrift.THttpClient).DelHeader("X-Line-Application")
+	commandClient.Transport.(*thrift.THttpClient).DelHeader("Connection")
+
+	commandClient.Transport.(*thrift.THttpClient).SetHeader("X-LS", Line_X_LS)
+
+	// TODO: GetProfile
+	profile, err := commandClient.GetProfile()
+	if err != nil {
+		log.Fatalln("Error GetProfile: ", err)
+	}
+	log.Printf("profile: [%v]\n", cyanBold(profile.String()))
+
+	// TODO: handle pinverfication request
 	if result.GetTypeA1() == line.LoginResultType_REQUIRE_DEVICE_CONFIRM {
 		log.Fatalf("error: need pin verification; not handle yet")
 		// Code here:
