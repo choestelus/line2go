@@ -107,6 +107,15 @@ func main() {
 	}
 	log.Printf("profile: [%v]\n", cyanBold(profile.String()))
 
+	// TODO: GetAllContactIds
+	allContactIDs, err := commandClient.GetAllContactIds()
+	if err != nil {
+		log.Fatalln("Error GetAllContactIds: ", err)
+	}
+	for index, element := range allContactIDs {
+		fmt.Printf("#%v: [%v]\n", index, element)
+	}
+
 	// TODO: handle pinverfication request
 	if result.GetTypeA1() == line.LoginResultType_REQUIRE_DEVICE_CONFIRM {
 		log.Fatalf("error: need pin verification; not handle yet")
