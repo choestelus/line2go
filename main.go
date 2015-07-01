@@ -2,11 +2,13 @@ package main
 
 import (
 	"fmt"
-	"git.apache.org/thrift.git/lib/go/thrift"
-	"github.com/fatih/color"
 	"io/ioutil"
 	"line"
 	"log"
+	"strconv"
+
+	"git.apache.org/thrift.git/lib/go/thrift"
+	"github.com/fatih/color"
 )
 
 var (
@@ -37,7 +39,7 @@ func main() {
 	// set specific header
 	loginTrans.SetHeader("User-Agent", AppUserAgent)
 	loginTrans.SetHeader("X-Line-Application", LineApplication)
-	loginTrans.SetHeader("connection", "keep-alive")
+	loginTrans.SetHeader("Connection", "Keep-Alive")
 
 	transportFactory := thrift.NewTTransportFactory()
 	wrappedloginTransport := transportFactory.GetTransport(loginTrans)
@@ -58,9 +60,25 @@ func main() {
 	if err != nil {
 		log.Fatalln("Error logging in: ", err)
 	}
+
+	// Initialize new client from received authtoken
+	token = result.GetAuthToken()
+	commandTrans.SetHeader("X-Line-Access", token)
+	commandTrans.SetHeader("User-Agent", AppUserAgent)
+	commandTrans.SetHeader("X-Line-Application", LineApplication)
+	commandTrans.SetHeader("Connection", "Keep-Alive")
+
+	wrappedCommandTransport := transportFactory.GetTransport(commandTrans)
+	commandClient := line.NewTalkServiceClientFactory(wrappedCommandTransport, thrift.NewTCompactProtocolFactory())
+
+	lastOpRevision, err := commandClient.GetLastOpRevision()
+	if err != nil {
+		log.Fatalln("Error GetLastOpRevision: ", err)
+	}
+
 	// proof that GetHeader is useless to get header from HTTP response messages.
-	//fmt.Printf("\ntest get-header: [%v]\n", loginClient.Transport.(*thrift.THttpClient).GetHeader("X-Line-Application"))
-	//fmt.Printf("\ntest get-header: [%v]\n", loginClient.Transport.(*thrift.THttpClient).GetHeader("X-Lcr"))
+	// fmt.Printf("\ntest get-header: [%v]\n", loginClient.Transport.(*thrift.THttpClient).GetHeader("X-Line-Application"))
+	// fmt.Printf("\ntest get-header: [%v]\n", loginClient.Transport.(*thrift.THttpClient).GetHeader("X-Lcr"))
 
 	// Workaround: use this instead
 	// disclamier: น่าจะ Non thread-safe if there are more than 1 go-routine call using loginClient instance
@@ -68,7 +86,9 @@ func main() {
 
 	prettyResult := fmt.Sprint(greenBold(result.String()))
 	log.Printf("Type: [%T], result: %v\n", result, prettyResult)
+
 	printLoginResult(result)
+	fmt.Printf("GetLastOpRevision = %v\n", greenBold(strconv.FormatInt(lastOpRevision, 10)))
 
 	//TODO: handle pinverfication request
 	if result.GetTypeA1() == line.LoginResultType_REQUIRE_DEVICE_CONFIRM {
