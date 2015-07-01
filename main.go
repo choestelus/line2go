@@ -113,8 +113,12 @@ func main() {
 		log.Fatalln("Error GetAllContactIds: ", err)
 	}
 	for index, element := range allContactIDs {
-		fmt.Printf("#%v: [%v]\n", index, element)
+		fmt.Fprintf(ioutil.Discard, "#%v: [%v]\n", index, element)
 	}
+
+	// TODO: GetMessageBoxCompactWrapUpList
+	wrapuplist, err := commandClient.GetMessageBoxCompactWrapUpList(1, 50)
+	fmt.Printf("%v\n", wrapuplist.String())
 
 	// TODO: handle pinverfication request
 	if result.GetTypeA1() == line.LoginResultType_REQUIRE_DEVICE_CONFIRM {
