@@ -25,3 +25,7 @@ _testmain.go
 
 # vim swap files
 *.swp
+
+# Custom build script and executables
+build.sh
+line2go
