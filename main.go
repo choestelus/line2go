@@ -22,8 +22,6 @@ func main() {
 	ident := "choestelus@gmail.com"
 	pwd := "suchlinemuchwow@443"
 
-	// type assertion
-
 	result, err := LoginLine(ident, pwd)
 	if err != nil {
 		log.Fatalln("Error logging in: ", err)
@@ -31,8 +29,6 @@ func main() {
 	// TODO: handle pinverfication request
 	if result.GetTypeA1() == line.LoginResultType_REQUIRE_DEVICE_CONFIRM {
 		log.Fatalf("error: need pin verification; not handle yet")
-		// Code here:
-		// create blank http request
 	}
 
 	// Initialize new client from received authtoken
@@ -58,14 +54,12 @@ func main() {
 
 	SetHeaderForClientReuse(commandClient, Line_X_LS)
 
-	// TODO: GetProfile
 	profile, err := commandClient.GetProfile()
 	if err != nil {
 		log.Fatalln("Error GetProfile: ", err)
 	}
 	log.Printf("profile: [%v]\n", cyanBold(profile.String()))
 
-	// TODO: GetAllContactIds
 	allContactIDs, err := commandClient.GetAllContactIds()
 	if err != nil {
 		log.Fatalln("Error GetAllContactIds: ", err)
@@ -74,7 +68,6 @@ func main() {
 		fmt.Fprintf(ioutil.Discard, "#%v: [%v]\n", index, element)
 	}
 
-	// TODO: GetMessageBoxCompactWrapUpList
 	wrapuplist, err := commandClient.GetMessageBoxCompactWrapUpList(1, 50)
-	fmt.Printf("%v\n", wrapuplist.String())
+	fmt.Fprintf(ioutil.Discard, "%v\n", wrapuplist.String())
 }
