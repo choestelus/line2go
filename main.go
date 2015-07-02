@@ -34,7 +34,6 @@ func main() {
 	// Initialize new client from received authtoken
 	token = result.GetAuthToken()
 
-	// commandClient := line.NewTalkServiceClientFactory(wrappedCommandTransport, thrift.NewTCompactProtocolFactory())
 	commandClient := GetCommandClient(token)
 
 	lastOpRevision, err := commandClient.GetLastOpRevision()
