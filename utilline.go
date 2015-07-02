@@ -13,11 +13,12 @@ import (
 var cyanBold = color.New(color.FgCyan).Add(color.Bold).SprintFunc()
 var greenBold = color.New(color.FgGreen).Add(color.Bold).SprintFunc()
 
+// Login to LINE Server using E-mail as identifier and plaintext password
 func LoginLine(ident string, ptPassword string) (*line.LoginResult_, error) {
 	loginURL := HTTPPrefix + LineThriftServer + LineLoginPath
 	loginTransport, err := thrift.NewTHttpPostClient(loginURL)
 	if err != nil {
-		log.Fatalln("Error Creating HTTP Client: ", err)
+		log.Fatalln("Error Creating Login HTTP Client: ", err)
 	}
 	loginTrans := loginTransport.(*thrift.THttpClient)
 
@@ -53,6 +54,7 @@ func LoginLine(ident string, ptPassword string) (*line.LoginResult_, error) {
 	return result, err
 }
 
+// Print formatted *line.LoginResult_
 func printLoginResult(result *line.LoginResult_) {
 	fmt.Println("--------------------------------------------------------------------------------")
 	fmt.Printf("token: [%v]\n", cyanBold(result.GetAuthToken()))
@@ -60,4 +62,33 @@ func printLoginResult(result *line.LoginResult_) {
 	fmt.Printf("pincode: [%v]\n", cyanBold(result.GetPinCode()))
 	fmt.Printf("loginResult: [%v]\n", cyanBold(result.GetTypeA1().String()))
 	fmt.Printf("verifier: [%v]\n", cyanBold(result.GetVerifier()))
+	fmt.Println("--------------------------------------------------------------------------------")
+}
+
+// Returns Command Client to use with first command in initialization Sequence
+func GetCommandClient(authToken string) *line.TalkServiceClient {
+	commandURL := HTTPPrefix + LineThriftServer + LineCommandPath
+	commandTransport, err := thrift.NewTHttpPostClient(commandURL)
+	if err != nil {
+		log.Fatalln("Error Creating Command HTTP Client: ", err)
+	}
+	commandTrans := commandTransport.(*thrift.THttpClient)
+	commandTrans.SetHeader("X-Line-Access", authToken)
+	commandTrans.SetHeader("User-Agent", AppUserAgent)
+	commandTrans.SetHeader("X-Line-Application", LineApplication)
+	commandTrans.SetHeader("Connection", "Keep-Alive")
+
+	wrappedCommandTrans := thrift.NewTTransportFactory().GetTransport(commandTrans)
+	commandClient := line.NewTalkServiceClientFactory(wrappedCommandTrans, thrift.NewTCompactProtocolFactory())
+
+	return commandClient
+}
+
+func SetHeaderForClientReuse(client *line.TalkServiceClient, x_ls_header string) {
+	// Add X-LS request header, remove other unused headers
+	client.Transport.(*thrift.THttpClient).DelHeader("X-Line-Access")
+	client.Transport.(*thrift.THttpClient).DelHeader("User-Agent")
+	client.Transport.(*thrift.THttpClient).DelHeader("X-Line-Application")
+	client.Transport.(*thrift.THttpClient).DelHeader("Connection")
+	client.Transport.(*thrift.THttpClient).SetHeader("X-LS", x_ls_header)
 }
