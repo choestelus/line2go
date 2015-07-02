@@ -8,7 +8,6 @@ import (
 	"strconv"
 
 	"git.apache.org/thrift.git/lib/go/thrift"
-	"github.com/fatih/color"
 )
 
 var (
@@ -18,8 +17,6 @@ var (
 
 func main() {
 	fmt.Fprintf(ioutil.Discard, "")
-	greenBold := color.New(color.FgGreen).Add(color.Bold).SprintFunc()
-
 	var err error
 	var loginClient *line.TalkServiceClient
 	var loginTransport thrift.TTransport
@@ -56,7 +53,7 @@ func main() {
 		true,
 		"127.0.0.1",
 		AppUserAgent,
-		"Pidgin")
+		"")
 
 	if err != nil {
 		log.Fatalln("Error logging in: ", err)
