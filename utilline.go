@@ -11,16 +11,18 @@ import (
 )
 
 type IcecreamClient struct {
-	CommandClient *line.TalkServiceClient
-	LoginClient   *line.TalkServiceClient
-	PollingClient *line.TalkServiceClient
-	authToken     string
-	x_ls_header   string
-	opRevision    int64
-	useHTTPS      string
-	loginURL      string
-	commandURL    string
-	pollingURL    string
+	CommandClient      *line.TalkServiceClient
+	LoginClient        *line.TalkServiceClient
+	PollingClient      *line.TalkServiceClient
+	authToken          string
+	x_ls_header        string
+	opRevision         int64
+	useHTTPS           string
+	loginURL           string
+	commandURL         string
+	pollingURL         string
+	userAgent          string
+	x_line_application string
 }
 
 type IcecreamService interface {
@@ -53,6 +55,24 @@ func (this *IcecreamClient) getLoginClient() (client *line.TalkServiceClient, er
 
 	client = line.NewTalkServiceClientFactory(wrappedLoginTrans, thrift.NewTCompactProtocolFactory())
 	return client, err
+}
+
+func (this *IcecreamClient) getCommandClient() (client *line.TalkServiceClient, err error) {
+	commandURL := this.useHTTPS + this.commandURL
+	commandTransport, err := thrift.NewTHttpPostClient(commandURL)
+	if err != nil {
+		return client, err
+	}
+	commandTrans := commandTransport.(*thrift.THttpClient)
+	commandTrans.SetHeader("X-Line-Access", this.authToken)
+	commandTrans.SetHeader("User-Agent", this.userAgent)
+	commandTrans.SetHeader("X-Line-Application", this.x_line_application)
+	commandTrans.SetHeader("Connection", "Keep-Alive")
+
+	wrappedCommandTrans := thrift.NewTTransportFactory().GetTransport(commandTrans)
+	client = line.NewTalkServiceClientFactory(wrappedCommandTrans, thrift.NewTCompactProtocolFactory())
+
+	return
 }
 
 func (this *IcecreamClient) Init() (err error) {
