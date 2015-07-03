@@ -75,6 +75,21 @@ func (this *IcecreamClient) getCommandClient() (client *line.TalkServiceClient, 
 	return
 }
 
+func (this *IcecreamClient) getPollingClient() (client *line.TalkServiceClient, err error) {
+	pollingURL := this.useHTTPS + this.pollingURL
+	pollingTransport, err := thrift.NewTHttpPostClient(pollingURL)
+	if err != nil {
+		return
+	}
+	pollingTrans := pollingTransport.(*thrift.THttpClient)
+	// TODO: set header accordingly to specified Naver LINE Protocol
+
+	wrappedPollingTrans := thrift.NewTTransportFactory().GetTransport(pollingTrans)
+	client = line.NewTalkServiceClientFactory(wrappedPollingTrans, thrift.NewTCompactProtocolFactory())
+
+	return
+}
+
 func (this *IcecreamClient) Init() (err error) {
 	// TODO: initialize all the necessary service client
 	this.LoginClient, err = this.getLoginClient()
