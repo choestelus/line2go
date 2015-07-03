@@ -15,27 +15,6 @@ var (
 	Line_X_LS string
 )
 
-type IcecreamClient struct {
-	CommandClient *line.TalkServiceClient
-	LoginClient   *line.TalkServiceClient
-	PollingClient *line.TalkServiceClient
-	authToken     string
-	x_ls_header   string
-	opRevision    int64
-}
-
-type IcecreamService interface {
-	Login(ident string, pwd string) error
-	GetProfile() (line.Profile, error)
-	GetAllContactIDs() ([]string, error)
-	GetAllGroups() ([]string, error)
-	GetMessageHistory(id string) ([]string, error)
-	GetAuthToken() string
-	GetCertificate() string
-	GetOpRevision() int64
-	GetX_LSHeader() (string, error)
-}
-
 func main() {
 	fmt.Fprintf(ioutil.Discard, "")
 	var err error
