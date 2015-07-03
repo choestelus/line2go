@@ -20,6 +20,7 @@ type IcecreamClient struct {
 }
 
 type IcecreamService interface {
+	Init() error
 	Login(ident string, pwd string) error
 	GetProfile() (line.Profile, error)
 	GetAllContactIDs() ([]string, error)
@@ -29,6 +30,10 @@ type IcecreamService interface {
 	GetCertificate() string
 	GetOpRevision() int64
 	GetX_LSHeader() (string, error)
+}
+
+func (this *IcecreamClient) Init() (err error) {
+	return
 }
 
 var cyanBold = color.New(color.FgCyan).Add(color.Bold).SprintFunc()
