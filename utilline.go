@@ -17,10 +17,15 @@ type IcecreamClient struct {
 	authToken     string
 	x_ls_header   string
 	opRevision    int64
+	useHTTPS      string
+	loginURL      string
+	commandURL    string
+	pollingURL    string
 }
 
 type IcecreamService interface {
 	Init() error
+	SetHTTPS(bool)
 	Login(ident string, pwd string) error
 	GetProfile() (line.Profile, error)
 	GetAllContactIDs() ([]string, error)
@@ -32,7 +37,34 @@ type IcecreamService interface {
 	GetX_LSHeader() (string, error)
 }
 
+func (this *IcecreamClient) getLoginClient() (client *line.TalkServiceClient, err error) {
+	loginURL := this.useHTTPS + this.loginURL
+	loginTransport, err := thrift.NewTHttpPostClient(loginURL)
+	if err != nil {
+		return client, err
+	}
+	loginTrans := loginTransport.(*thrift.THttpClient)
+
+	loginTrans.SetHeader("User-Agent", AppUserAgent)
+	loginTrans.SetHeader("X-Line-Application", LineApplication)
+	loginTrans.SetHeader("Connection", "Keep-Alive")
+
+	wrappedLoginTrans := thrift.NewTTransportFactory().GetTransport(loginTrans)
+
+	client = line.NewTalkServiceClientFactory(wrappedLoginTrans, thrift.NewTCompactProtocolFactory())
+	return client, err
+}
+
 func (this *IcecreamClient) Init() (err error) {
+	// TODO: initialize all the necessary service client
+	this.LoginClient, err = this.getLoginClient()
+	if err != nil {
+		return
+	}
+
+	//commandClient
+
+	//pollingCLient
 	return
 }
 
