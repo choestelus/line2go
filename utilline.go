@@ -15,19 +15,24 @@ type IcecreamClient struct {
 	CommandClient *line.TalkServiceClient
 	LoginClient   *line.TalkServiceClient
 	PollingClient *line.TalkServiceClient
+
 	// URLs & HTTPS
 	useHTTPS   string
 	loginURL   string
 	commandURL string
 	pollingURL string
+
 	// Returned variables
 	authToken  string
 	opRevision int64
+
 	// Returned headers
 	x_ls_header        string
 	x_line_application string
+
 	// Client specified user-agent
 	userAgent string
+
 	// remember state of command client (first use or not), deal with header
 	commandClientState bool
 }
