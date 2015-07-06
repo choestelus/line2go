@@ -10,6 +10,123 @@ import (
 	"github.com/fatih/color"
 )
 
+type IcecreamClient struct {
+	// A bunch of clients
+	CommandClient *line.TalkServiceClient
+	LoginClient   *line.TalkServiceClient
+	PollingClient *line.TalkServiceClient
+
+	// URLs & HTTPS
+	useHTTPS   string
+	loginURL   string
+	commandURL string
+	pollingURL string
+
+	// Returned variables
+	authToken  string
+	opRevision int64
+
+	// Returned headers
+	x_ls_header        string
+	x_line_application string
+
+	// Client specified user-agent
+	userAgent string
+
+	// remember state of command client (first use or not), deal with header
+	commandClientState bool
+	pollingClientState bool
+}
+
+type IcecreamService interface {
+	SetHTTPS(bool)
+	Login(ident string, pwd string) error
+	GetProfile() (line.Profile, error)
+	GetAllContactIDs() ([]string, error)
+	GetAllGroups() ([]string, error)
+	GetMessageHistory(id string) ([]string, error)
+	GetAuthToken() string
+	GetCertificate() string
+	GetOpRevision() int64
+	GetX_LSHeader() (string, error)
+}
+
+func (this *IcecreamClient) getLoginClient() (client *line.TalkServiceClient) {
+	// Assuming URL is sanitized
+	loginURL := this.useHTTPS + this.loginURL
+	loginTransport, err := thrift.NewTHttpPostClient(loginURL)
+	if err != nil {
+		log.Fatalln("error creating loginTransport: ", err)
+	}
+	loginTrans := loginTransport.(*thrift.THttpClient)
+
+	loginTrans.SetHeader("User-Agent", AppUserAgent)
+	loginTrans.SetHeader("X-Line-Application", LineApplication)
+	loginTrans.SetHeader("Connection", "Keep-Alive")
+
+	wrappedLoginTrans := thrift.NewTTransportFactory().GetTransport(loginTrans)
+
+	client = line.NewTalkServiceClientFactory(wrappedLoginTrans, thrift.NewTCompactProtocolFactory())
+	return client
+}
+
+func (this *IcecreamClient) getCommandClient() (client *line.TalkServiceClient) {
+	// Assuming URL is sanitized
+	commandURL := this.useHTTPS + this.commandURL
+	commandTransport, err := thrift.NewTHttpPostClient(commandURL)
+	if err != nil {
+		log.Fatalln("error creating commandTransport: ", err)
+	}
+	commandTrans := commandTransport.(*thrift.THttpClient)
+	commandTrans.SetHeader("X-Line-Access", this.authToken)
+	commandTrans.SetHeader("User-Agent", this.userAgent)
+	commandTrans.SetHeader("X-Line-Application", this.x_line_application)
+	commandTrans.SetHeader("Connection", "Keep-Alive")
+
+	wrappedCommandTrans := thrift.NewTTransportFactory().GetTransport(commandTrans)
+	client = line.NewTalkServiceClientFactory(wrappedCommandTrans, thrift.NewTCompactProtocolFactory())
+
+	return
+}
+
+func (this *IcecreamClient) getPollingClient() (client *line.TalkServiceClient, err error) {
+	// Assuming URL is sanitized
+	pollingURL := this.useHTTPS + this.pollingURL
+	pollingTransport, err := thrift.NewTHttpPostClient(pollingURL)
+	if err != nil {
+		log.Fatalln("error creating pollingTransport: ", err)
+	}
+	pollingTrans := pollingTransport.(*thrift.THttpClient)
+	pollingTrans.SetHeader("X-Line-Access", this.authToken)
+	pollingTrans.SetHeader("User-Agent", this.userAgent) // TODO: set header accordingly to specified Naver LINE Protocol
+	pollingTrans.SetHeader("X-Line-Application", this.x_line_application)
+	pollingTrans.SetHeader("Connection", "Keep-Alive")
+	wrappedPollingTrans := thrift.NewTTransportFactory().GetTransport(pollingTrans)
+	client = line.NewTalkServiceClientFactory(wrappedPollingTrans, thrift.NewTCompactProtocolFactory())
+
+	return
+}
+
+func NewIcecreamClient() (client *IcecreamClient, err error) {
+	// TODO: decoupling from global constant
+	someClient := &IcecreamClient{
+		useHTTPS:   HTTPPrefix,
+		commandURL: LineThriftServer + LineCommandPath,
+		loginURL:   LineThriftServer + LineLoginPath,
+		pollingURL: LineThriftServer + LinePollPath,
+		userAgent:  AppUserAgent,
+	}
+	// TODO: initialize polling service client
+	someClient.LoginClient = someClient.getLoginClient()
+
+	//commandClient
+	someClient.CommandClient = someClient.getCommandClient()
+
+	//pollingClient
+
+	return
+}
+
 var cyanBold = color.New(color.FgCyan).Add(color.Bold).SprintFunc()
 var greenBold = color.New(color.FgGreen).Add(color.Bold).SprintFunc()
 
