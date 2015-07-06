@@ -11,22 +11,29 @@ import (
 )
 
 type IcecreamClient struct {
-	CommandClient      *line.TalkServiceClient
-	LoginClient        *line.TalkServiceClient
-	PollingClient      *line.TalkServiceClient
-	authToken          string
+	// A bunch of clients
+	CommandClient *line.TalkServiceClient
+	LoginClient   *line.TalkServiceClient
+	PollingClient *line.TalkServiceClient
+	// URLs & HTTPS
+	useHTTPS   string
+	loginURL   string
+	commandURL string
+	pollingURL string
+	// Returned variables
+	authToken  string
+	opRevision int64
+	// Returned headers
 	x_ls_header        string
-	opRevision         int64
-	useHTTPS           string
-	loginURL           string
-	commandURL         string
-	pollingURL         string
-	userAgent          string
 	x_line_application string
+	// Client specified user-agent
+	userAgent string
+	// remember state of command client (first use or not), deal with header
+	commandClientState bool
 }
 
 type IcecreamService interface {
-	Init() error
+	NewIcecreamClient() error
 	SetHTTPS(bool)
 	Login(ident string, pwd string) error
 	GetProfile() (line.Profile, error)
@@ -90,7 +97,7 @@ func (this *IcecreamClient) getPollingClient() (client *line.TalkServiceClient, 
 	return
 }
 
-func (this *IcecreamClient) Init() (err error) {
+func (this *IcecreamClient) NewIcecreamClient() (err error) {
 	// TODO: initialize all the necessary service client
 	this.LoginClient, err = this.getLoginClient()
 	if err != nil {
