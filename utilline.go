@@ -55,7 +55,7 @@ func (this *IcecreamClient) getLoginClient() (client *line.TalkServiceClient) {
 	loginURL := this.useHTTPS + this.loginURL
 	loginTransport, err := thrift.NewTHttpPostClient(loginURL)
 	if err != nil {
-		log.Fatalln("error creating loginTransport", err)
+		log.Fatalln("error creating loginTransport: ", err)
 	}
 	loginTrans := loginTransport.(*thrift.THttpClient)
 
@@ -74,7 +74,7 @@ func (this *IcecreamClient) getCommandClient() (client *line.TalkServiceClient) 
 	commandURL := this.useHTTPS + this.commandURL
 	commandTransport, err := thrift.NewTHttpPostClient(commandURL)
 	if err != nil {
-		log.Fatalln("error creating commandTransport", err)
+		log.Fatalln("error creating commandTransport: ", err)
 	}
 	commandTrans := commandTransport.(*thrift.THttpClient)
 	commandTrans.SetHeader("X-Line-Access", this.authToken)
@@ -92,7 +92,7 @@ func (this *IcecreamClient) getPollingClient() (client *line.TalkServiceClient, 
 	pollingURL := this.useHTTPS + this.pollingURL
 	pollingTransport, err := thrift.NewTHttpPostClient(pollingURL)
 	if err != nil {
-		return
+		log.Fatalln("error creating pollingTransport: ", err)
 	}
 	pollingTrans := pollingTransport.(*thrift.THttpClient)
 	pollingTrans.SetHeader("X-Line-Access", this.authToken)
