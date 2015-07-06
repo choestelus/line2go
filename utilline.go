@@ -38,7 +38,6 @@ type IcecreamClient struct {
 }
 
 type IcecreamService interface {
-	NewIcecreamClient() error
 	SetHTTPS(bool)
 	Login(ident string, pwd string) error
 	GetProfile() (line.Profile, error)
@@ -51,11 +50,12 @@ type IcecreamService interface {
 	GetX_LSHeader() (string, error)
 }
 
-func (this *IcecreamClient) getLoginClient() (client *line.TalkServiceClient, err error) {
+func (this *IcecreamClient) getLoginClient() (client *line.TalkServiceClient) {
+	// Assuming URL is sanitized
 	loginURL := this.useHTTPS + this.loginURL
 	loginTransport, err := thrift.NewTHttpPostClient(loginURL)
 	if err != nil {
-		return client, err
+		log.Fatalln("error creating loginTransport", err)
 	}
 	loginTrans := loginTransport.(*thrift.THttpClient)
 
@@ -66,14 +66,15 @@ func (this *IcecreamClient) getLoginClient() (client *line.TalkServiceClient, er
 	wrappedLoginTrans := thrift.NewTTransportFactory().GetTransport(loginTrans)
 
 	client = line.NewTalkServiceClientFactory(wrappedLoginTrans, thrift.NewTCompactProtocolFactory())
-	return client, err
+	return client
 }
 
-func (this *IcecreamClient) getCommandClient() (client *line.TalkServiceClient, err error) {
+func (this *IcecreamClient) getCommandClient() (client *line.TalkServiceClient) {
+	// Assuming URL is sanitized
 	commandURL := this.useHTTPS + this.commandURL
 	commandTransport, err := thrift.NewTHttpPostClient(commandURL)
 	if err != nil {
-		return client, err
+		log.Fatalln("error creating commandTransport", err)
 	}
 	commandTrans := commandTransport.(*thrift.THttpClient)
 	commandTrans.SetHeader("X-Line-Access", this.authToken)
@@ -94,24 +95,33 @@ func (this *IcecreamClient) getPollingClient() (client *line.TalkServiceClient, 
 		return
 	}
 	pollingTrans := pollingTransport.(*thrift.THttpClient)
-	// TODO: set header accordingly to specified Naver LINE Protocol
-
+	pollingTrans.SetHeader("X-Line-Access", this.authToken)
+	pollingTrans.SetHeader("User-Agent", this.userAgent) // TODO: set header accordingly to specified Naver LINE Protocol
+	pollingTrans.SetHeader("X-Line-Application", this.x_line_application)
+	pollingTrans.SetHeader("Connection", "Keep-Alive")
 	wrappedPollingTrans := thrift.NewTTransportFactory().GetTransport(pollingTrans)
 	client = line.NewTalkServiceClientFactory(wrappedPollingTrans, thrift.NewTCompactProtocolFactory())
 
 	return
 }
 
-func (this *IcecreamClient) NewIcecreamClient() (err error) {
-	// TODO: initialize all the necessary service client
-	this.LoginClient, err = this.getLoginClient()
-	if err != nil {
-		return
+func NewIcecreamClient() (client *IcecreamClient, err error) {
+	// TODO: decoupling from global constant
+	someClient := &IcecreamClient{
+		useHTTPS:   HTTPPrefix,
+		commandURL: LineThriftServer + LineCommandPath,
+		loginURL:   LineThriftServer + LineLoginPath,
+		pollingURL: LineThriftServer + LinePollPath,
+		userAgent:  AppUserAgent,
 	}
+	// TODO: initialize polling service client
+	someClient.LoginClient = someClient.getLoginClient()
 
 	//commandClient
+	someClient.CommandClient = someClient.getCommandClient()
 
-	//pollingCLient
+	//pollingClient
+
 	return
 }
 
