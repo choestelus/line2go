@@ -58,6 +58,7 @@ func (this *IcecreamClient) getLoginClient() (client *line.TalkServiceClient) {
 	if err != nil {
 		log.Fatalln("error creating loginTransport: ", err)
 	}
+
 	loginTrans := loginTransport.(*thrift.THttpClient)
 
 	loginTrans.SetHeader("User-Agent", AppUserAgent)
@@ -65,8 +66,8 @@ func (this *IcecreamClient) getLoginClient() (client *line.TalkServiceClient) {
 	loginTrans.SetHeader("Connection", "Keep-Alive")
 
 	wrappedLoginTrans := thrift.NewTTransportFactory().GetTransport(loginTrans)
-
 	client = line.NewTalkServiceClientFactory(wrappedLoginTrans, thrift.NewTCompactProtocolFactory())
+
 	return client
 }
 
@@ -77,6 +78,7 @@ func (this *IcecreamClient) getCommandClient() (client *line.TalkServiceClient) 
 	if err != nil {
 		log.Fatalln("error creating commandTransport: ", err)
 	}
+
 	commandTrans := commandTransport.(*thrift.THttpClient)
 	commandTrans.SetHeader("X-Line-Access", this.authToken)
 	commandTrans.SetHeader("User-Agent", this.userAgent)
@@ -89,18 +91,20 @@ func (this *IcecreamClient) getCommandClient() (client *line.TalkServiceClient) 
 	return
 }
 
-func (this *IcecreamClient) getPollingClient() (client *line.TalkServiceClient, err error) {
+func (this *IcecreamClient) getPollingClient() (client *line.TalkServiceClient) {
 	// Assuming URL is sanitized
 	pollingURL := this.useHTTPS + this.pollingURL
 	pollingTransport, err := thrift.NewTHttpPostClient(pollingURL)
 	if err != nil {
 		log.Fatalln("error creating pollingTransport: ", err)
 	}
+
 	pollingTrans := pollingTransport.(*thrift.THttpClient)
 	pollingTrans.SetHeader("X-Line-Access", this.authToken)
-	pollingTrans.SetHeader("User-Agent", this.userAgent) // TODO: set header accordingly to specified Naver LINE Protocol
+	pollingTrans.SetHeader("User-Agent", this.userAgent)
 	pollingTrans.SetHeader("X-Line-Application", this.x_line_application)
 	pollingTrans.SetHeader("Connection", "Keep-Alive")
+
 	wrappedPollingTrans := thrift.NewTTransportFactory().GetTransport(pollingTrans)
 	client = line.NewTalkServiceClientFactory(wrappedPollingTrans, thrift.NewTCompactProtocolFactory())
 
@@ -123,6 +127,7 @@ func NewIcecreamClient() (client *IcecreamClient, err error) {
 	someClient.CommandClient = someClient.getCommandClient()
 
 	//pollingClient
+	someClient.PollingClient = someClient.getPollingClient()
 
 	return
 }
