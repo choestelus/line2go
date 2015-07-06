@@ -35,6 +35,7 @@ type IcecreamClient struct {
 
 	// remember state of command client (first use or not), deal with header
 	commandClientState bool
+	pollingClientState bool
 }
 
 type IcecreamService interface {
@@ -89,6 +90,7 @@ func (this *IcecreamClient) getCommandClient() (client *line.TalkServiceClient) 
 }
 
 func (this *IcecreamClient) getPollingClient() (client *line.TalkServiceClient, err error) {
+	// Assuming URL is sanitized
 	pollingURL := this.useHTTPS + this.pollingURL
 	pollingTransport, err := thrift.NewTHttpPostClient(pollingURL)
 	if err != nil {
