@@ -152,35 +152,11 @@ func (client *IcecreamClient) Login(ident string, ptpwd string) (result *line.Lo
 		"127.0.0.1",
 		AppUserAgent,
 		"")
-	if err != nil {
+	if err != nil || result.GetTypeA1() != line.LoginResultType_SUCCESS {
 		return
 	}
+	client.authToken = result.GetAuthToken()
 	return
-}
-
-// Login to LINE Server using E-mail as identifier and plaintext password
-func LoginLine(ident string, ptPassword string, client *line.TalkServiceClient) (*line.LoginResult_, error) {
-	// Parameters:
-	//  - IdentityProvider
-	//  - Identifier
-	//  - Password
-	//  - KeepLoggedIn
-	//  - AccessLocation
-	//  - SystemName
-	//  - Certificate
-	result, err := client.LoginWithIdentityCredentialForCertificate(
-		line.IdentityProvider_LINE,
-		ident,
-		ptPassword,
-		true,
-		"127.0.0.1",
-		AppUserAgent,
-		"")
-	if err != nil {
-		log.Fatalln("Error logging in: ", err)
-	}
-
-	return result, err
 }
 
 // Print formatted *line.LoginResult_
