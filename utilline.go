@@ -136,7 +136,7 @@ var cyanBold = color.New(color.FgCyan).Add(color.Bold).SprintFunc()
 var greenBold = color.New(color.FgGreen).Add(color.Bold).SprintFunc()
 
 // Login to LINE Server using E-mail as identifier and plaintext password
-func LoginLine2(ident string, ptPassword string, client *line.TalkServiceClient) (*line.LoginResult_, error) {
+func LoginLine(ident string, ptPassword string, client *line.TalkServiceClient) (*line.LoginResult_, error) {
 	// Parameters:
 	//  - IdentityProvider
 	//  - Identifier
@@ -146,47 +146,6 @@ func LoginLine2(ident string, ptPassword string, client *line.TalkServiceClient)
 	//  - SystemName
 	//  - Certificate
 	result, err := client.LoginWithIdentityCredentialForCertificate(
-		line.IdentityProvider_LINE,
-		ident,
-		ptPassword,
-		true,
-		"127.0.0.1",
-		AppUserAgent,
-		"")
-	if err != nil {
-		log.Fatalln("Error logging in: ", err)
-	}
-
-	return result, err
-}
-
-// Login to LINE Server using E-mail as identifier and plaintext password
-func LoginLine(ident string, ptPassword string) (*line.LoginResult_, error) {
-	loginURL := HTTPPrefix + LineThriftServer + LineLoginPath
-	loginTransport, err := thrift.NewTHttpPostClient(loginURL)
-	if err != nil {
-		log.Fatalln("Error Creating Login HTTP Client: ", err)
-	}
-	loginTrans := loginTransport.(*thrift.THttpClient)
-
-	// set specific header
-	loginTrans.SetHeader("User-Agent", AppUserAgent)
-	loginTrans.SetHeader("X-Line-Application", LineApplication)
-	loginTrans.SetHeader("Connection", "Keep-Alive")
-
-	wrappedLoginTrans := thrift.NewTTransportFactory().GetTransport(loginTrans)
-
-	loginClient := line.NewTalkServiceClientFactory(wrappedLoginTrans, thrift.NewTCompactProtocolFactory())
-
-	// Parameters:
-	//  - IdentityProvider
-	//  - Identifier
-	//  - Password
-	//  - KeepLoggedIn
-	//  - AccessLocation
-	//  - SystemName
-	//  - Certificate
-	result, err := loginClient.LoginWithIdentityCredentialForCertificate(
 		line.IdentityProvider_LINE,
 		ident,
 		ptPassword,
