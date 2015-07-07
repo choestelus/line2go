@@ -50,7 +50,7 @@ type LoginService interface {
 }
 
 type PollingService interface {
-	fetch()
+	fetch() ([]*line.Operation, error)
 }
 
 type CommandService interface {
