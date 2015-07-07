@@ -37,24 +37,26 @@ type IcecreamClient struct {
 	commandClientState bool
 	pollingClientState bool
 }
-
+type ThriftLineService interface {
+	SetHTTPS(bool)
+	GetOpRevision() int64
+	GetX_LSHeader() (string, error)
+}
 type LoginService interface {
 	Login(string, string) (*line.LoginResult_, error)
 	GetAuthToken() string
 	GetCertificate() string
 }
+type PollingService interface {
+	fetch()
+}
 
-type IcecreamService interface {
-	SetHTTPS(bool)
-	Login(ident string, pwd string) error
+type CommandService interface {
 	GetProfile() (line.Profile, error)
 	GetAllContactIDs() ([]string, error)
 	GetAllGroups() ([]string, error)
 	GetMessageHistory(id string) ([]string, error)
-	GetAuthToken() string
-	GetCertificate() string
 	GetOpRevision() int64
-	GetX_LSHeader() (string, error)
 }
 
 func (this *IcecreamClient) getLoginClient() (client *line.TalkServiceClient) {
