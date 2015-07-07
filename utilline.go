@@ -58,7 +58,7 @@ type CommandService interface {
 	GetAllContactIDs() ([]string, error)
 	GetAllGroups() ([]string, error)
 	GetMessageHistory(id string) ([]string, error)
-	GetOpRevision() int64
+	GetLastOpRevision() int64
 }
 
 type LineCommunicator interface {
@@ -172,6 +172,33 @@ func (client *IcecreamClient) Login(ident string, ptpwd string) (result *line.Lo
 	return
 }
 
+func (client *IcecreamClient) GetLastOpRevision() (r int64, err error) {
+	r, err = client.CommandClient.GetLastOpRevision()
+	if err != nil {
+		return
+	}
+	client.setCommandState()
+	return
+}
+
+func (client *IcecreamClient) GetAuthToken() string {
+	return client.authToken
+}
+
+func setState(state *bool) {
+	if *state != true {
+		*state = true
+	}
+}
+
+func (client *IcecreamClient) setCommandState() {
+	setState(&client.commandClientState)
+}
+
+func (client *IcecreamClient) setPollingState() {
+	setState(&client.pollingClientState)
+}
+
 // Print formatted *line.LoginResult_
 func printLoginResult(result *line.LoginResult_) {
 	fmt.Println("--------------------------------------------------------------------------------")
@@ -209,4 +236,12 @@ func SetHeaderForClientReuse(client *line.TalkServiceClient, x_ls_header string)
 	client.Transport.(*thrift.THttpClient).DelHeader("X-Line-Application")
 	client.Transport.(*thrift.THttpClient).DelHeader("Connection")
 	client.Transport.(*thrift.THttpClient).SetHeader("X-LS", x_ls_header)
+}
+
+func SetHeaderForClientInit(client *line.TalkServiceClient) {
+	client.Transport.(*thrift.THttpClient).DelHeader("X-LS")
+	client.Transport.(*thrift.THttpClient).SetHeader("X-Line-Access", authToken)
+	client.Transport.(*thrift.THttpClient).SetHeader("User-Agent", AppUserAgent)
+	client.Transport.(*thrift.THttpClient).SetHeader("X-Line-Application", LineApplication)
+	client.Transport.(*thrift.THttpClient).SetHeader("Connection", "Keep-Alive")
 }
