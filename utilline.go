@@ -135,6 +135,29 @@ func NewIcecreamClient() (client *IcecreamClient) {
 var cyanBold = color.New(color.FgCyan).Add(color.Bold).SprintFunc()
 var greenBold = color.New(color.FgGreen).Add(color.Bold).SprintFunc()
 
+func (client *IcecreamClient) Login(ident string, ptpwd string) (result *line.LoginResult_, err error) {
+	// Parameters:
+	//  - IdentityProvider
+	//  - Identifier
+	//  - Password
+	//  - KeepLoggedIn
+	//  - AccessLocation
+	//  - SystemName
+	//  - Certificate
+	result, err = client.LoginClient.LoginWithIdentityCredentialForCertificate(
+		line.IdentityProvider_LINE,
+		ident,
+		ptpwd,
+		true,
+		"127.0.0.1",
+		AppUserAgent,
+		"")
+	if err != nil {
+		return
+	}
+	return
+}
+
 // Login to LINE Server using E-mail as identifier and plaintext password
 func LoginLine(ident string, ptPassword string, client *line.TalkServiceClient) (*line.LoginResult_, error) {
 	// Parameters:

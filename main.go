@@ -24,8 +24,7 @@ func main() {
 	ident := "choestelus@gmail.com"
 	pwd := "suchlinemuchwow@443"
 
-	//result, err := LoginLine(ident, pwd)
-	result, err := LoginLine(ident, pwd, sherbet.LoginClient)
+	result, err := sherbet.Login(ident, pwd)
 	if err != nil {
 		log.Fatalln("Error logging in: ", err)
 	}
