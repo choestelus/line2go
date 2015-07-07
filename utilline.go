@@ -39,7 +39,6 @@ type IcecreamClient struct {
 }
 type ThriftLineService interface {
 	SetHTTPS(bool)
-	GetOpRevision() int64
 	GetX_LSHeader() (string, error)
 }
 type LoginService interface {
@@ -57,6 +56,12 @@ type CommandService interface {
 	GetAllGroups() ([]string, error)
 	GetMessageHistory(id string) ([]string, error)
 	GetOpRevision() int64
+}
+type LineCommunicator interface {
+	ThriftLineService
+	LoginService
+	CommandService
+	PollingService
 }
 
 func (this *IcecreamClient) getLoginClient() (client *line.TalkServiceClient) {
