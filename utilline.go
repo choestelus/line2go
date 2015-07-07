@@ -38,6 +38,12 @@ type IcecreamClient struct {
 	pollingClientState bool
 }
 
+type LoginService interface {
+	Login(string, string) (*line.LoginResult_, error)
+	GetAuthToken() string
+	GetCertificate() string
+}
+
 type IcecreamService interface {
 	SetHTTPS(bool)
 	Login(ident string, pwd string) error
@@ -120,13 +126,9 @@ func NewIcecreamClient() (client *IcecreamClient) {
 		pollingURL: LineThriftServer + LinePollPath,
 		userAgent:  AppUserAgent,
 	}
-	// TODO: initialize polling service client
+
 	client.LoginClient = client.getLoginClient()
-
-	//commandClient
 	client.CommandClient = client.getCommandClient()
-
-	//pollingClient
 	client.PollingClient = client.getPollingClient()
 
 	return
