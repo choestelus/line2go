@@ -25,7 +25,7 @@ func main() {
 	pwd := "suchlinemuchwow@443"
 
 	//result, err := LoginLine(ident, pwd)
-	result, err := LoginLine2(ident, pwd, sherbet.LoginClient)
+	result, err := LoginLine(ident, pwd, sherbet.LoginClient)
 	if err != nil {
 		log.Fatalln("Error logging in: ", err)
 	}
