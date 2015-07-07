@@ -18,11 +18,14 @@ var (
 func main() {
 	fmt.Fprintf(ioutil.Discard, "")
 	var err error
+	sherbet := NewIcecreamClient()
 
+	fmt.Printf("this is sherbet %T:\n[%v]\n", sherbet, sherbet)
 	ident := "choestelus@gmail.com"
 	pwd := "suchlinemuchwow@443"
 
-	result, err := LoginLine(ident, pwd)
+	//result, err := LoginLine(ident, pwd)
+	result, err := LoginLine2(ident, pwd, sherbet.LoginClient)
 	if err != nil {
 		log.Fatalln("Error logging in: ", err)
 	}

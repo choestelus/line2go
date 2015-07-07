@@ -111,9 +111,9 @@ func (this *IcecreamClient) getPollingClient() (client *line.TalkServiceClient) 
 	return
 }
 
-func NewIcecreamClient() (client *IcecreamClient, err error) {
+func NewIcecreamClient() (client *IcecreamClient) {
 	// TODO: decoupling from global constant
-	someClient := &IcecreamClient{
+	client = &IcecreamClient{
 		useHTTPS:   HTTPPrefix,
 		commandURL: LineThriftServer + LineCommandPath,
 		loginURL:   LineThriftServer + LineLoginPath,
@@ -121,19 +121,44 @@ func NewIcecreamClient() (client *IcecreamClient, err error) {
 		userAgent:  AppUserAgent,
 	}
 	// TODO: initialize polling service client
-	someClient.LoginClient = someClient.getLoginClient()
+	client.LoginClient = client.getLoginClient()
 
 	//commandClient
-	someClient.CommandClient = someClient.getCommandClient()
+	client.CommandClient = client.getCommandClient()
 
 	//pollingClient
-	someClient.PollingClient = someClient.getPollingClient()
+	client.PollingClient = client.getPollingClient()
 
 	return
 }
 
 var cyanBold = color.New(color.FgCyan).Add(color.Bold).SprintFunc()
 var greenBold = color.New(color.FgGreen).Add(color.Bold).SprintFunc()
+
+// Login to LINE Server using E-mail as identifier and plaintext password
+func LoginLine2(ident string, ptPassword string, client *line.TalkServiceClient) (*line.LoginResult_, error) {
+	// Parameters:
+	//  - IdentityProvider
+	//  - Identifier
+	//  - Password
+	//  - KeepLoggedIn
+	//  - AccessLocation
+	//  - SystemName
+	//  - Certificate
+	result, err := client.LoginWithIdentityCredentialForCertificate(
+		line.IdentityProvider_LINE,
+		ident,
+		ptPassword,
+		true,
+		"127.0.0.1",
+		AppUserAgent,
+		"")
+	if err != nil {
+		log.Fatalln("Error logging in: ", err)
+	}
+
+	return result, err
+}
 
 // Login to LINE Server using E-mail as identifier and plaintext password
 func LoginLine(ident string, ptPassword string) (*line.LoginResult_, error) {
