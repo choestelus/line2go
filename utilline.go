@@ -37,15 +37,18 @@ type IcecreamClient struct {
 	commandClientState bool
 	pollingClientState bool
 }
+
 type ThriftLineService interface {
 	SetHTTPS(bool)
 	GetX_LSHeader() (string, error)
 }
+
 type LoginService interface {
 	Login(string, string) (*line.LoginResult_, error)
 	GetAuthToken() string
 	GetCertificate() string
 }
+
 type PollingService interface {
 	fetch()
 }
@@ -57,6 +60,7 @@ type CommandService interface {
 	GetMessageHistory(id string) ([]string, error)
 	GetOpRevision() int64
 }
+
 type LineCommunicator interface {
 	ThriftLineService
 	LoginService
