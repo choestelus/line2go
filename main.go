@@ -55,8 +55,6 @@ func main() {
 	Line_X_LS = sherbet.CommandClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-LS")
 	fmt.Printf("\nX-LS: [%v]\n", cyanBold(Line_X_LS))
 
-	//SetHeaderForClientReuse(commandClient, Line_X_LS)
-
 	// profile, err := commandClient.GetProfile()
 	// if err != nil {
 	// 	log.Fatalln("Error GetProfile: ", err)
