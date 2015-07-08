@@ -27,7 +27,8 @@ type IcecreamClient struct {
 	opRevision int64
 
 	// Returned headers
-	x_ls_header        string
+	cx_ls_header       string
+	px_ls_header       string
 	x_line_application string
 
 	// Client specified user-agent
@@ -173,6 +174,12 @@ func (client *IcecreamClient) Login(ident string, ptpwd string) (result *line.Lo
 }
 
 func (client *IcecreamClient) GetLastOpRevision() (r int64, err error) {
+	if client.commandClientState == true {
+		SetHeaderForClientReuse(client, client.cx_ls_header)
+	} else {
+		SetHeaderForClientInit(client, client.authToken, client.userAgent, client.x_line_application)
+	}
+
 	r, err = client.CommandClient.GetLastOpRevision()
 	if err != nil {
 		return
@@ -192,10 +199,12 @@ func setState(state *bool) {
 }
 
 func (client *IcecreamClient) setCommandState() {
+	client.cx_ls_header = client.CommandClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-LS")
 	setState(&client.commandClientState)
 }
 
 func (client *IcecreamClient) setPollingState() {
+	client.px_ls_header = client.PollingClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-LS")
 	setState(&client.pollingClientState)
 }
 
