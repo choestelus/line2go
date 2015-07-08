@@ -27,7 +27,8 @@ type IcecreamClient struct {
 	opRevision int64
 
 	// Returned headers
-	x_ls_header        string
+	cx_ls_header       string
+	px_ls_header       string
 	x_line_application string
 
 	// Client specified user-agent
@@ -58,7 +59,7 @@ type CommandService interface {
 	GetAllContactIDs() ([]string, error)
 	GetAllGroups() ([]string, error)
 	GetMessageHistory(id string) ([]string, error)
-	GetLastOpRevision() int64
+	GetLastOpRevision() (int64, error)
 }
 
 type LineCommunicator interface {
@@ -131,11 +132,12 @@ func (this *IcecreamClient) getPollingClient() (client *line.TalkServiceClient) 
 func NewIcecreamClient() (client *IcecreamClient) {
 	// TODO: decoupling from global constant
 	client = &IcecreamClient{
-		useHTTPS:   HTTPPrefix,
-		commandURL: LineThriftServer + LineCommandPath,
-		loginURL:   LineThriftServer + LineLoginPath,
-		pollingURL: LineThriftServer + LinePollPath,
-		userAgent:  AppUserAgent,
+		useHTTPS:           HTTPPrefix,
+		commandURL:         LineThriftServer + LineCommandPath,
+		loginURL:           LineThriftServer + LineLoginPath,
+		pollingURL:         LineThriftServer + LinePollPath,
+		userAgent:          AppUserAgent,
+		x_line_application: LineApplication,
 	}
 
 	client.LoginClient = client.getLoginClient()
@@ -168,11 +170,17 @@ func (client *IcecreamClient) Login(ident string, ptpwd string) (result *line.Lo
 	if err != nil || result.GetTypeA1() != line.LoginResultType_SUCCESS {
 		return
 	}
+	log.Println("token from login: ", result.GetAuthToken())
 	client.authToken = result.GetAuthToken()
 	return
 }
 
 func (client *IcecreamClient) GetLastOpRevision() (r int64, err error) {
+	if client.commandClientState == true {
+		SetHeaderForClientReuse(client.CommandClient, client.cx_ls_header)
+	} else {
+		SetHeaderForClientInit(client.CommandClient, client.authToken, client.userAgent, client.x_line_application)
+	}
 	r, err = client.CommandClient.GetLastOpRevision()
 	if err != nil {
 		return
@@ -192,10 +200,12 @@ func setState(state *bool) {
 }
 
 func (client *IcecreamClient) setCommandState() {
+	client.cx_ls_header = client.CommandClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-LS")
 	setState(&client.commandClientState)
 }
 
 func (client *IcecreamClient) setPollingState() {
+	client.px_ls_header = client.PollingClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-LS")
 	setState(&client.pollingClientState)
 }
 
@@ -235,11 +245,18 @@ func SetHeaderForClientReuse(client *line.TalkServiceClient, x_ls_header string)
 	client.Transport.(*thrift.THttpClient).DelHeader("User-Agent")
 	client.Transport.(*thrift.THttpClient).DelHeader("X-Line-Application")
 	client.Transport.(*thrift.THttpClient).DelHeader("Connection")
+	client.Transport.(*thrift.THttpClient).DelHeader("X-LS")
+
 	client.Transport.(*thrift.THttpClient).SetHeader("X-LS", x_ls_header)
 }
 
 func SetHeaderForClientInit(client *line.TalkServiceClient, authToken string, userAgent string, x_line_application string) {
 	client.Transport.(*thrift.THttpClient).DelHeader("X-LS")
+	client.Transport.(*thrift.THttpClient).DelHeader("X-Line-Access")
+	client.Transport.(*thrift.THttpClient).DelHeader("User-Agent")
+	client.Transport.(*thrift.THttpClient).DelHeader("X-Line-Application")
+	client.Transport.(*thrift.THttpClient).DelHeader("Connection")
+
 	client.Transport.(*thrift.THttpClient).SetHeader("X-Line-Access", authToken)
 	client.Transport.(*thrift.THttpClient).SetHeader("User-Agent", userAgent)
 	client.Transport.(*thrift.THttpClient).SetHeader("X-Line-Application", x_line_application)
