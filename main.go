@@ -34,11 +34,12 @@ func main() {
 	}
 
 	// Initialize new client from received authtoken
-	token = result.GetAuthToken()
+	// token = result.GetAuthToken()
 
-	commandClient := GetCommandClient(token)
+	// commandClient := GetCommandClient(token)
 
-	lastOpRevision, err := commandClient.GetLastOpRevision()
+	// lastOpRevision, err := commandClient.GetLastOpRevision()
+	lastOpRevision, err := sherbet.GetLastOpRevision()
 	if err != nil {
 		log.Fatalln("Error GetLastOpRevision: ", err)
 	}
@@ -50,25 +51,26 @@ func main() {
 	fmt.Printf("GetLastOpRevision = %v\n", greenBold(strconv.FormatInt(lastOpRevision, 10)))
 
 	// Get X-LS value from response header
-	Line_X_LS = commandClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-LS")
+	// Line_X_LS = commandClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-LS")
+	Line_X_LS = sherbet.CommandClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-LS")
 	fmt.Printf("\nX-LS: [%v]\n", cyanBold(Line_X_LS))
 
-	SetHeaderForClientReuse(commandClient, Line_X_LS)
+	//SetHeaderForClientReuse(commandClient, Line_X_LS)
 
-	profile, err := commandClient.GetProfile()
-	if err != nil {
-		log.Fatalln("Error GetProfile: ", err)
-	}
-	log.Printf("profile: [%v]\n", cyanBold(profile.String()))
+	// profile, err := commandClient.GetProfile()
+	// if err != nil {
+	// 	log.Fatalln("Error GetProfile: ", err)
+	// }
+	// log.Printf("profile: [%v]\n", cyanBold(profile.String()))
 
-	allContactIDs, err := commandClient.GetAllContactIds()
-	if err != nil {
-		log.Fatalln("Error GetAllContactIds: ", err)
-	}
-	for index, element := range allContactIDs {
-		fmt.Fprintf(ioutil.Discard, "#%v: [%v]\n", index, element)
-	}
+	// allContactIDs, err := commandClient.GetAllContactIds()
+	// if err != nil {
+	// 	log.Fatalln("Error GetAllContactIds: ", err)
+	// }
+	// for index, element := range allContactIDs {
+	// 	fmt.Fprintf(ioutil.Discard, "#%v: [%v]\n", index, element)
+	// }
 
-	wrapuplist, err := commandClient.GetMessageBoxCompactWrapUpList(1, 50)
-	fmt.Fprintf(ioutil.Discard, "%v\n", wrapuplist.String())
+	// wrapuplist, err := commandClient.GetMessageBoxCompactWrapUpList(1, 50)
+	// fmt.Fprintf(ioutil.Discard, "%v\n", wrapuplist.String())
 }
