@@ -175,9 +175,9 @@ func (client *IcecreamClient) Login(ident string, ptpwd string) (result *line.Lo
 
 func (client *IcecreamClient) GetLastOpRevision() (r int64, err error) {
 	if client.commandClientState == true {
-		SetHeaderForClientReuse(client, client.cx_ls_header)
+		SetHeaderForClientReuse(client.CommandClient, client.cx_ls_header)
 	} else {
-		SetHeaderForClientInit(client, client.authToken, client.userAgent, client.x_line_application)
+		SetHeaderForClientInit(client.CommandClient, client.authToken, client.userAgent, client.x_line_application)
 	}
 
 	r, err = client.CommandClient.GetLastOpRevision()
