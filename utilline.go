@@ -179,17 +179,8 @@ func (client *IcecreamClient) GetLastOpRevision() (r int64, err error) {
 	if client.commandClientState == true {
 		SetHeaderForClientReuse(client.CommandClient, client.cx_ls_header)
 	} else {
-		log.Println("auth code :[", client.authToken, "]")
-		log.Println("user agent :[", client.userAgent, "]")
-		log.Println("X-Line-Application :[", client.x_line_application, "]")
 		SetHeaderForClientInit(client.CommandClient, client.authToken, client.userAgent, client.x_line_application)
 	}
-
-	log.Println("X-LS: ", client.CommandClient.Transport.(*thrift.THttpClient).GetHeader("X-LS"))
-	log.Println("X-Line-Access: ", client.CommandClient.Transport.(*thrift.THttpClient).GetHeader("X-Line-Access"))
-	log.Println("User-Agent: ", client.CommandClient.Transport.(*thrift.THttpClient).GetHeader("User-Agent"))
-	log.Println("X-Line-Application: ", client.CommandClient.Transport.(*thrift.THttpClient).GetHeader("X-Line-Application"))
-	log.Println("Connection: ", client.CommandClient.Transport.(*thrift.THttpClient).GetHeader("Connection"))
 	r, err = client.CommandClient.GetLastOpRevision()
 	if err != nil {
 		return
