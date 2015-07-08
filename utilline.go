@@ -186,6 +186,7 @@ func (client *IcecreamClient) GetLastOpRevision() (r int64, err error) {
 		return
 	}
 	client.setCommandState()
+	client.opRevision = r
 	return
 }
 
