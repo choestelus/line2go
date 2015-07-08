@@ -69,7 +69,7 @@ type LineCommunicator interface {
 	PollingService
 }
 
-func (this *IcecreamClient) getLoginClient() (client *line.TalkServiceClient) {
+func (this *IcecreamClient) NewLoginClient() (client *line.TalkServiceClient) {
 	// Assuming URL is sanitized
 	loginURL := this.useHTTPS + this.loginURL
 	loginTransport, err := thrift.NewTHttpPostClient(loginURL)
@@ -89,7 +89,7 @@ func (this *IcecreamClient) getLoginClient() (client *line.TalkServiceClient) {
 	return client
 }
 
-func (this *IcecreamClient) getCommandClient() (client *line.TalkServiceClient) {
+func (this *IcecreamClient) NewCommandClient() (client *line.TalkServiceClient) {
 	// Assuming URL is sanitized
 	commandURL := this.useHTTPS + this.commandURL
 	commandTransport, err := thrift.NewTHttpPostClient(commandURL)
@@ -109,7 +109,7 @@ func (this *IcecreamClient) getCommandClient() (client *line.TalkServiceClient) 
 	return
 }
 
-func (this *IcecreamClient) getPollingClient() (client *line.TalkServiceClient) {
+func (this *IcecreamClient) NewPollingClient() (client *line.TalkServiceClient) {
 	// Assuming URL is sanitized
 	pollingURL := this.useHTTPS + this.pollingURL
 	pollingTransport, err := thrift.NewTHttpPostClient(pollingURL)
@@ -140,9 +140,9 @@ func NewIcecreamClient() (client *IcecreamClient) {
 		x_line_application: LineApplication,
 	}
 
-	client.LoginClient = client.getLoginClient()
-	client.CommandClient = client.getCommandClient()
-	client.PollingClient = client.getPollingClient()
+	client.LoginClient = client.NewLoginClient()
+	client.CommandClient = client.NewCommandClient()
+	client.PollingClient = client.NewPollingClient()
 
 	return
 }
