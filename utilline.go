@@ -254,12 +254,18 @@ func SetHeaderForClientReuse(client *line.TalkServiceClient, x_ls_header string)
 	client.Transport.(*thrift.THttpClient).DelHeader("User-Agent")
 	client.Transport.(*thrift.THttpClient).DelHeader("X-Line-Application")
 	client.Transport.(*thrift.THttpClient).DelHeader("Connection")
+	client.Transport.(*thrift.THttpClient).DelHeader("X-LS")
+
 	client.Transport.(*thrift.THttpClient).SetHeader("X-LS", x_ls_header)
 }
 
 func SetHeaderForClientInit(client *line.TalkServiceClient, authToken string, userAgent string, x_line_application string) {
 	client.Transport.(*thrift.THttpClient).DelHeader("X-LS")
 	client.Transport.(*thrift.THttpClient).DelHeader("X-Line-Access")
+	client.Transport.(*thrift.THttpClient).DelHeader("User-Agent")
+	client.Transport.(*thrift.THttpClient).DelHeader("X-Line-Application")
+	client.Transport.(*thrift.THttpClient).DelHeader("Connection")
+
 	client.Transport.(*thrift.THttpClient).SetHeader("X-Line-Access", authToken)
 	client.Transport.(*thrift.THttpClient).SetHeader("User-Agent", userAgent)
 	client.Transport.(*thrift.THttpClient).SetHeader("X-Line-Application", x_line_application)
