@@ -57,10 +57,11 @@ func main() {
 	fmt.Printf("\nX-LS: [%v]\n", cyanBold(Line_X_LS))
 
 	// profile, err := commandClient.GetProfile()
-	// if err != nil {
-	// 	log.Fatalln("Error GetProfile: ", err)
-	// }
-	// log.Printf("profile: [%v]\n", cyanBold(profile.String()))
+	profile, err := sherbet.GetProfile()
+	if err != nil {
+		log.Fatalln("Error GetProfile: ", err)
+	}
+	log.Printf("profile: [%v]\n", cyanBold(profile.String()))
 
 	// allContactIDs, err := commandClient.GetAllContactIds()
 	// if err != nil {
