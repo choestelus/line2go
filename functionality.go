@@ -92,3 +92,41 @@ func (client *IcecreamClient) GetContact(contactID string) (r *line.Contact, err
 	// end after section
 	return
 }
+
+func (client *IcecreamClient) GetGroupIdsJoined() (r []string, err error) {
+
+	// begin before section
+	if client.commandClientState == true {
+		SetHeaderForClientReuse(client.CommandClient, client.cx_ls_header)
+	} else {
+		SetHeaderForClientInit(client.CommandClient, client.authToken, client.userAgent, client.x_line_application)
+	}
+	// end before section
+
+	r, err = client.CommandClient.GetGroupIdsJoined()
+
+	// begin after section
+	client.setCommandState()
+	// end after section
+
+	return
+}
+
+func (client *IcecreamClient) GetGroupIdsInvited() (r []string, err error) {
+
+	// begin before section
+	if client.commandClientState == true {
+		SetHeaderForClientReuse(client.CommandClient, client.cx_ls_header)
+	} else {
+		SetHeaderForClientInit(client.CommandClient, client.authToken, client.userAgent, client.x_line_application)
+	}
+	// end before section
+
+	r, err = client.CommandClient.GetGroupIdsInvited()
+
+	// begin after section
+	client.setCommandState()
+	// end after section
+
+	return
+}

@@ -85,6 +85,16 @@ func main() {
 		log.Fatalln("Error Get Contact: ", err)
 	}
 	fmt.Println("contact: [", contact.GetStatus(), contact.GetDisplayName(), "]")
-	// wrapuplist, err := commandClient.GetMessageBoxCompactWrapUpList(1, 50)
-	// fmt.Fprintf(ioutil.Discard, "%v\n", wrapuplist.String())
+
+	groupsJoined, err := sherbet.GetGroupIdsJoined()
+	if err != nil {
+		log.Fatalln("Error GetGroupIdsJoined(): ", err)
+	}
+	fmt.Println(greenBold("Groups Joined: "), groupsJoined)
+
+	groupsInvited, err := sherbet.GetGroupIdsInvited()
+	if err != nil {
+		log.Fatalln("Error GetGroupIdsInvited(): ", err)
+	}
+	fmt.Println(greenBold("Groups Invited: "), groupsInvited)
 }
