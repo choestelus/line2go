@@ -79,7 +79,12 @@ func main() {
 	if err != nil {
 		log.Fatalln("Error GetContacts: ", err)
 	}
-	fmt.Println(greenBold("contacts: "), contacts)
+	fmt.Println(greenBold("contacts: "), contacts[len(contacts)-3:len(contacts)-1])
+	contact, err := sherbet.GetContact(allContactIDs[0])
+	if err != nil {
+		log.Fatalln("Error Get Contact: ", err)
+	}
+	fmt.Println("contact: [", contact.GetStatus(), contact.GetDisplayName(), "]")
 	// wrapuplist, err := commandClient.GetMessageBoxCompactWrapUpList(1, 50)
 	// fmt.Fprintf(ioutil.Discard, "%v\n", wrapuplist.String())
 }
