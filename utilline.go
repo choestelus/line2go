@@ -58,6 +58,7 @@ type CommandService interface {
 	GetProfile() (line.Profile, error)
 	GetAllContactIDs() ([]string, error)
 	GetAllGroups() ([]string, error)
+	GetContacts(contactIDs []string) (r []*line.Contact, err error)
 	GetMessageHistory(id string) ([]string, error)
 	GetLastOpRevision() (int64, error)
 }
