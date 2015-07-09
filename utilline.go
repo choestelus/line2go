@@ -58,6 +58,7 @@ type CommandService interface {
 	GetProfile() (line.Profile, error)
 	GetAllContactIDs() ([]string, error)
 	GetAllGroups() ([]string, error)
+	GetContacts(contactIDs []string) (r []*line.Contact, err error)
 	GetMessageHistory(id string) ([]string, error)
 	GetLastOpRevision() (int64, error)
 }
@@ -69,7 +70,7 @@ type LineCommunicator interface {
 	PollingService
 }
 
-func (this *IcecreamClient) getLoginClient() (client *line.TalkServiceClient) {
+func (this *IcecreamClient) NewLoginClient() (client *line.TalkServiceClient) {
 	// Assuming URL is sanitized
 	loginURL := this.useHTTPS + this.loginURL
 	loginTransport, err := thrift.NewTHttpPostClient(loginURL)
@@ -89,7 +90,7 @@ func (this *IcecreamClient) getLoginClient() (client *line.TalkServiceClient) {
 	return client
 }
 
-func (this *IcecreamClient) getCommandClient() (client *line.TalkServiceClient) {
+func (this *IcecreamClient) NewCommandClient() (client *line.TalkServiceClient) {
 	// Assuming URL is sanitized
 	commandURL := this.useHTTPS + this.commandURL
 	commandTransport, err := thrift.NewTHttpPostClient(commandURL)
@@ -109,7 +110,7 @@ func (this *IcecreamClient) getCommandClient() (client *line.TalkServiceClient) 
 	return
 }
 
-func (this *IcecreamClient) getPollingClient() (client *line.TalkServiceClient) {
+func (this *IcecreamClient) NewPollingClient() (client *line.TalkServiceClient) {
 	// Assuming URL is sanitized
 	pollingURL := this.useHTTPS + this.pollingURL
 	pollingTransport, err := thrift.NewTHttpPostClient(pollingURL)
@@ -140,9 +141,9 @@ func NewIcecreamClient() (client *IcecreamClient) {
 		x_line_application: LineApplication,
 	}
 
-	client.LoginClient = client.getLoginClient()
-	client.CommandClient = client.getCommandClient()
-	client.PollingClient = client.getPollingClient()
+	client.LoginClient = client.NewLoginClient()
+	client.CommandClient = client.NewCommandClient()
+	client.PollingClient = client.NewPollingClient()
 
 	return
 }
@@ -172,20 +173,6 @@ func (client *IcecreamClient) Login(ident string, ptpwd string) (result *line.Lo
 	}
 	log.Println("token from login: ", result.GetAuthToken())
 	client.authToken = result.GetAuthToken()
-	return
-}
-
-func (client *IcecreamClient) GetLastOpRevision() (r int64, err error) {
-	if client.commandClientState == true {
-		SetHeaderForClientReuse(client.CommandClient, client.cx_ls_header)
-	} else {
-		SetHeaderForClientInit(client.CommandClient, client.authToken, client.userAgent, client.x_line_application)
-	}
-	r, err = client.CommandClient.GetLastOpRevision()
-	if err != nil {
-		return
-	}
-	client.setCommandState()
 	return
 }
 
