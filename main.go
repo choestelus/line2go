@@ -70,7 +70,9 @@ func main() {
 		log.Fatalln("Error GetAllContactIds: ", err)
 	}
 	for index, element := range allContactIDs {
-		fmt.Fprintf(os.Stdout, "#%v: [%v]\n", index, element)
+		if index == len(allContactIDs)-1 {
+			fmt.Fprintf(os.Stdout, "#%v: [%v]\n", index, element)
+		}
 	}
 
 	// wrapuplist, err := commandClient.GetMessageBoxCompactWrapUpList(1, 50)
