@@ -75,6 +75,11 @@ func main() {
 		}
 	}
 
+	contacts, err := sherbet.GetContacts(allContactIDs)
+	if err != nil {
+		log.Fatalln("Error GetContacts: ", err)
+	}
+	fmt.Println(greenBold("contacts: "), contacts)
 	// wrapuplist, err := commandClient.GetMessageBoxCompactWrapUpList(1, 50)
 	// fmt.Fprintf(ioutil.Discard, "%v\n", wrapuplist.String())
 }
