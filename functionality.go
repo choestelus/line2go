@@ -3,29 +3,41 @@ package main
 import "line"
 
 func (client *IcecreamClient) GetLastOpRevision() (r int64, err error) {
+	// begin before section
 	if client.commandClientState == true {
 		SetHeaderForClientReuse(client.CommandClient, client.cx_ls_header)
 	} else {
 		SetHeaderForClientInit(client.CommandClient, client.authToken, client.userAgent, client.x_line_application)
 	}
+	// end before section
+
 	r, err = client.CommandClient.GetLastOpRevision()
 	if err != nil {
 		return
 	}
-	client.setCommandState()
 	client.opRevision = r
+
+	// begin after section
+	client.setCommandState()
+	// end after section
+
 	return
 }
 
 func (client *IcecreamClient) GetProfile() (profile *line.Profile, err error) {
+	// begin before section
 	if client.commandClientState == true {
 		SetHeaderForClientReuse(client.CommandClient, client.cx_ls_header)
 	} else {
 		SetHeaderForClientInit(client.CommandClient, client.authToken, client.userAgent, client.x_line_application)
 	}
+	// end before section
 
 	profile, err = client.CommandClient.GetProfile()
+
+	// begin after section
 	client.setCommandState()
+	// end after section
 
 	return
 }
