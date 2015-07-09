@@ -97,4 +97,10 @@ func main() {
 		log.Fatalln("Error GetGroupIdsInvited(): ", err)
 	}
 	fmt.Println(greenBold("Groups Invited: "), groupsInvited)
+	groups, err := sherbet.GetGroups(groupsJoined)
+	for index, element := range groups {
+		if index == len(groups)-1 {
+			fmt.Printf("#%v: [%v]\n", cyanBold(index), element)
+		}
+	}
 }
