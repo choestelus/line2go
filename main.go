@@ -103,4 +103,6 @@ func main() {
 			fmt.Printf("#%v: [%v]\n", cyanBold(index), element)
 		}
 	}
+	group, err := sherbet.GetGroup(groupsJoined[0])
+	fmt.Println(greenBold("single group: "), group.String())
 }
