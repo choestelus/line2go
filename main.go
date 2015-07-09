@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 
 	"git.apache.org/thrift.git/lib/go/thrift"
 )
@@ -80,6 +81,13 @@ func main() {
 		log.Fatalln("Error GetContacts: ", err)
 	}
 	fmt.Println(greenBold("contacts: "), contacts[len(contacts)-3:len(contacts)-1])
+
+	for index, element := range contacts {
+		if strings.Contains(element.GetDisplayName(), "iko") {
+			fmt.Printf("\n\n #%v ID of %v It's : [%v]\n\n", index, element.GetDisplayName(), element.GetMid())
+		}
+	}
+
 	contact, err := sherbet.GetContact(allContactIDs[0])
 	if err != nil {
 		log.Fatalln("Error Get Contact: ", err)
@@ -111,4 +119,9 @@ func main() {
 		log.Fatalln("Error GetMessageBoxCompactWrapUpList: ", err)
 	}
 	fmt.Println(greenBold("msgboxl: "), "[", msgboxl.GetMessageBoxWrapUpList()[0].String(), "]")
+	rmsg, err := sherbet.SendTextMessage("ue2af231f5fe993dda7051b816d072c2c", "Such Wow Much Sent from Hardcoded LINE2Go")
+	if err != nil {
+		log.Fatalln("Error Sending Message", err)
+	}
+	fmt.Printf("Message sent\nID: [%v]\nothers: [%v]\n", cyanBold(rmsg.GetId()), cyanBold(rmsg.GetCreatedTime()))
 }

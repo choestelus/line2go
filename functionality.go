@@ -180,3 +180,26 @@ func (client *IcecreamClient) GetMessageBoxCompactWrapUpList(start int32, messag
 	// end after section
 	return
 }
+
+func (client *IcecreamClient) SendTextMessage(id string, text string) (r *line.Message, err error) {
+
+	// begin before section
+	if client.commandClientState == true {
+		SetHeaderForClientReuse(client.CommandClient, client.cx_ls_header)
+	} else {
+		SetHeaderForClientInit(client.CommandClient, client.authToken, client.userAgent, client.x_line_application)
+	}
+	// end before section
+
+	msg := &line.Message{
+		To:          id,
+		Text:        text,
+		ContentType: line.ContentType_NONE,
+	}
+	r, err = client.CommandClient.SendMessage(0, msg)
+
+	// begin after section
+	client.setCommandState()
+	// end after section
+	return
+}
