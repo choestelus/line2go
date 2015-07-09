@@ -146,3 +146,19 @@ func (client *IcecreamClient) GetGroups(groupsID []string) (groups []*line.Group
 	// end after section
 	return
 }
+
+func (client *IcecreamClient) GetGroup(groupID string) (group *line.Group, err error) {
+
+	// begin before section
+	if client.commandClientState == true {
+		SetHeaderForClientReuse(client.CommandClient, client.cx_ls_header)
+	} else {
+		SetHeaderForClientInit(client.CommandClient, client.authToken, client.userAgent, client.x_line_application)
+	}
+	// end before section
+	group, err = client.CommandClient.GetGroup(groupID)
+	// begin after section
+	client.setCommandState()
+	// end after section
+	return
+}
