@@ -119,7 +119,7 @@ func main() {
 		log.Fatalln("Error GetMessageBoxCompactWrapUpList: ", err)
 	}
 	fmt.Println(greenBold("msgboxl: "), "[", msgboxl.GetMessageBoxWrapUpList()[0].String(), "]")
-	rmsg, err := sherbet.SendTextMessage("ue2af231f5fe993dda7051b816d072c2c", "Such Wow Much Sent from Hardcoded LINE2Go")
+	rmsg, err := sherbet.SendTextMessage("ue2af231f5fe993dda7051b816d072c2c", "สวัสดี ภาษา go ก็รับ Unicode นะ :=")
 	if err != nil {
 		log.Fatalln("Error Sending Message", err)
 	}
