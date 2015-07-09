@@ -41,3 +41,18 @@ func (client *IcecreamClient) GetProfile() (profile *line.Profile, err error) {
 
 	return
 }
+
+func (client *IcecreamClient) GetAllContactIDs() (list []string, err error) {
+	// begin before section
+	if client.commandClientState == true {
+		SetHeaderForClientReuse(client.CommandClient, client.cx_ls_header)
+	} else {
+		SetHeaderForClientInit(client.CommandClient, client.authToken, client.userAgent, client.x_line_application)
+	}
+	// end before section
+	list, err = client.CommandClient.GetAllContactIds()
+	// begin after section
+	client.setCommandState()
+	// end after section
+	return
+}

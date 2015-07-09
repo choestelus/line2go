@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"line"
 	"log"
+	"os"
 	"strconv"
 
 	"git.apache.org/thrift.git/lib/go/thrift"
@@ -63,13 +64,14 @@ func main() {
 	}
 	log.Printf("profile: [%v]\n", cyanBold(profile.String()))
 
-	// allContactIDs, err := commandClient.GetAllContactIds()
-	// if err != nil {
-	// 	log.Fatalln("Error GetAllContactIds: ", err)
-	// }
-	// for index, element := range allContactIDs {
-	// 	fmt.Fprintf(ioutil.Discard, "#%v: [%v]\n", index, element)
-	// }
+	//allContactIDs, err := commandClient.GetAllContactIds()
+	allContactIDs, err := sherbet.GetAllContactIDs()
+	if err != nil {
+		log.Fatalln("Error GetAllContactIds: ", err)
+	}
+	for index, element := range allContactIDs {
+		fmt.Fprintf(os.Stdout, "#%v: [%v]\n", index, element)
+	}
 
 	// wrapuplist, err := commandClient.GetMessageBoxCompactWrapUpList(1, 50)
 	// fmt.Fprintf(ioutil.Discard, "%v\n", wrapuplist.String())
