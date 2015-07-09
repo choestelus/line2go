@@ -162,3 +162,21 @@ func (client *IcecreamClient) GetGroup(groupID string) (group *line.Group, err e
 	// end after section
 	return
 }
+
+// Default value is start = 1, messageBoxCount = 50
+func (client *IcecreamClient) GetMessageBoxCompactWrapUpList(start int32, messageBoxCount int32) (r *line.MessageBoxWrapUpList, err error) {
+
+	// begin before section
+	if client.commandClientState == true {
+		SetHeaderForClientReuse(client.CommandClient, client.cx_ls_header)
+	} else {
+		SetHeaderForClientInit(client.CommandClient, client.authToken, client.userAgent, client.x_line_application)
+	}
+	// end before section
+
+	r, err = client.CommandClient.GetMessageBoxCompactWrapUpList(start, messageBoxCount)
+	// begin after section
+	client.setCommandState()
+	// end after section
+	return
+}

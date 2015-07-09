@@ -105,4 +105,10 @@ func main() {
 	}
 	group, err := sherbet.GetGroup(groupsJoined[0])
 	fmt.Println(greenBold("single group: "), group.String())
+
+	msgboxl, err := sherbet.GetMessageBoxCompactWrapUpList(1, 50)
+	if err != nil {
+		log.Fatalln("Error GetMessageBoxCompactWrapUpList: ", err)
+	}
+	fmt.Println(greenBold("msgboxl: "), "[", msgboxl.GetMessageBoxWrapUpList()[0].String(), "]")
 }
