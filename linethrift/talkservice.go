@@ -6,7 +6,7 @@ package line
 import (
 	"bytes"
 	"fmt"
-	"git.apache.org/thrift.git/lib/go/thrift"
+	"line2go/thrift"
 )
 
 // (needed to ensure safety because of naive import list construction.)
