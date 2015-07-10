@@ -12,10 +12,7 @@ import (
 	"strings"
 )
 
-var (
-	token     string
-	Line_X_LS string
-)
+var ()
 
 func main() {
 	fmt.Fprintf(ioutil.Discard, "")
@@ -35,12 +32,6 @@ func main() {
 		log.Fatalf("error: need pin verification; not handle yet")
 	}
 
-	// Initialize new client from received authtoken
-	// token = result.GetAuthToken()
-
-	// commandClient := GetCommandClient(token)
-
-	// lastOpRevision, err := commandClient.GetLastOpRevision()
 	lastOpRevision, err := sherbet.GetLastOpRevision()
 	if err != nil {
 		log.Fatalln("Error GetLastOpRevision: ", err)
@@ -53,19 +44,15 @@ func main() {
 	fmt.Printf("GetLastOpRevision = %v\n", greenBold(strconv.FormatInt(lastOpRevision, 10)))
 	fmt.Printf("sherbet.opRevision = %v\n", greenBold(strconv.FormatInt(sherbet.opRevision, 10)))
 
-	// Get X-LS value from response header
-	// Line_X_LS = commandClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-LS")
-	Line_X_LS = sherbet.CommandClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-LS")
+	Line_X_LS := sherbet.CommandClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-LS")
 	fmt.Printf("\nX-LS: [%v]\n", cyanBold(Line_X_LS))
 
-	// profile, err := commandClient.GetProfile()
 	profile, err := sherbet.GetProfile()
 	if err != nil {
 		log.Fatalln("Error GetProfile: ", err)
 	}
 	log.Printf("profile: [%v]\n", cyanBold(profile.String()))
 
-	//allContactIDs, err := commandClient.GetAllContactIds()
 	allContactIDs, err := sherbet.GetAllContactIDs()
 	if err != nil {
 		log.Fatalln("Error GetAllContactIds: ", err)
