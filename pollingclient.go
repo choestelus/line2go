@@ -12,6 +12,9 @@ func (client *IcecreamClient) FetchOperations(localRev int64, count int32) (op [
 	}
 	// end before section
 	op, err = client.PollingClient.FetchOperations(client.opRevision, client.fetchCount)
+	if err != nil {
+		return
+	}
 
 	// begin after section
 	client.setPollingState()
