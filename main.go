@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"line2go/linethrift"
+	"line2go/thrift"
 
 	"log"
 	"os"
 	"strconv"
 	"strings"
-
-	"git.apache.org/thrift.git/lib/go/thrift"
 )
 
 var (
