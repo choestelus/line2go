@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"line"
+	"line2go/linethrift"
+
 	"log"
 
 	"git.apache.org/thrift.git/lib/go/thrift"

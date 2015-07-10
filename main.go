@@ -3,7 +3,8 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"line"
+	"line2go/linethrift"
+
 	"log"
 	"os"
 	"strconv"

@@ -1,6 +1,6 @@
 package main
 
-import "line"
+import "line2go/linethrift"
 
 func (client *IcecreamClient) GetLastOpRevision() (r int64, err error) {
 	// begin before section
