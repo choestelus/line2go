@@ -39,37 +39,6 @@ type IcecreamClient struct {
 	pollingClientState bool
 }
 
-type ThriftLineService interface {
-	SetHTTPS(bool)
-	GetX_LSHeader() (string, error)
-}
-
-type LoginService interface {
-	Login(string, string) (*line.LoginResult_, error)
-	GetAuthToken() string
-	GetCertificate() string
-}
-
-type PollingService interface {
-	fetch() ([]*line.Operation, error)
-}
-
-type CommandService interface {
-	GetProfile() (line.Profile, error)
-	GetAllContactIDs() ([]string, error)
-	GetAllGroups() ([]string, error)
-	GetContacts(contactIDs []string) (r []*line.Contact, err error)
-	GetMessageHistory(id string) ([]string, error)
-	GetLastOpRevision() (int64, error)
-}
-
-type LineCommunicator interface {
-	ThriftLineService
-	LoginService
-	CommandService
-	PollingService
-}
-
 func (this *IcecreamClient) NewLoginClient() (client *line.TalkServiceClient) {
 	// Assuming URL is sanitized
 	loginURL := this.useHTTPS + this.loginURL
