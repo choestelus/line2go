@@ -26,6 +26,8 @@ type IcecreamClient struct {
 	authToken  string
 	opRevision int64
 
+	fetchCount int32
+
 	// Returned headers
 	cx_ls_header       string
 	px_ls_header       string
@@ -108,6 +110,7 @@ func NewIcecreamClient() (client *IcecreamClient) {
 		pollingURL:         LineThriftServer + LinePollPath,
 		userAgent:          AppUserAgent,
 		x_line_application: LineApplication,
+		fetchCount:         DefaultFetchCount,
 	}
 
 	client.LoginClient = client.NewLoginClient()

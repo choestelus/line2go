@@ -17,3 +17,4 @@ const LineApplication = "DESKTOPWIN\t3.2.1.83\t\tWINDOWS\t5.1.2600-XP-x64"
 const HTTPPrefix = "https://"
 const AppUserAgent = "LINE2Go"
 const PinTimeout = 180 * 1E+9
+const DefaultFetchCount = 50
