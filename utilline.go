@@ -3,10 +3,9 @@ package main
 import (
 	"fmt"
 	"line2go/linethrift"
+	"line2go/thrift"
 
 	"log"
-
-	"git.apache.org/thrift.git/lib/go/thrift"
 
 	"github.com/fatih/color"
 )
