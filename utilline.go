@@ -207,25 +207,6 @@ func printLoginResult(result *line.LoginResult_) {
 	fmt.Println("--------------------------------------------------------------------------------")
 }
 
-// Returns Command Client to use with first command in initialization Sequence
-func GetCommandClient(authToken string) *line.TalkServiceClient {
-	commandURL := HTTPPrefix + LineThriftServer + LineCommandPath
-	commandTransport, err := thrift.NewTHttpPostClient(commandURL)
-	if err != nil {
-		log.Fatalln("Error Creating Command HTTP Client: ", err)
-	}
-	commandTrans := commandTransport.(*thrift.THttpClient)
-	commandTrans.SetHeader("X-Line-Access", authToken)
-	commandTrans.SetHeader("User-Agent", AppUserAgent)
-	commandTrans.SetHeader("X-Line-Application", LineApplication)
-	commandTrans.SetHeader("Connection", "Keep-Alive")
-
-	wrappedCommandTrans := thrift.NewTTransportFactory().GetTransport(commandTrans)
-	commandClient := line.NewTalkServiceClientFactory(wrappedCommandTrans, thrift.NewTCompactProtocolFactory())
-
-	return commandClient
-}
-
 func SetHeaderForClientReuse(client *line.TalkServiceClient, x_ls_header string) {
 	// Add X-LS request header, remove other unused headers
 	client.Transport.(*thrift.THttpClient).DelHeader("X-Line-Access")
