@@ -2,7 +2,7 @@ package main
 
 import "line2go/linethrift"
 
-func (client *IcecreamClient) FetchOperations(localRev int64, count int32) (op []*line.Operation, err error) {
+func (client *IcecreamClient) FetchOperations() (op []*line.Operation, err error) {
 
 	// begin before section
 	if client.pollingClientState == true {
