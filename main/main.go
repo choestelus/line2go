@@ -3,8 +3,11 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"line2go"
 	"line2go/linethrift"
 	"line2go/thrift"
+
+	"github.com/fatih/color"
 
 	"log"
 	"os"
@@ -12,15 +15,13 @@ import (
 	"strings"
 )
 
-var (
-	token     string
-	Line_X_LS string
-)
+var cyanBold = color.New(color.FgCyan).Add(color.Bold).SprintFunc()
+var greenBold = color.New(color.FgGreen).Add(color.Bold).SprintFunc()
 
 func main() {
 	fmt.Fprintf(ioutil.Discard, "")
 	var err error
-	sherbet := NewIcecreamClient()
+	sherbet := line2go.NewIcecreamClient()
 
 	fmt.Printf("this is sherbet %T:\n[%v]\n", sherbet, sherbet)
 	ident := "choestelus@gmail.com"
@@ -35,12 +36,6 @@ func main() {
 		log.Fatalf("error: need pin verification; not handle yet")
 	}
 
-	// Initialize new client from received authtoken
-	// token = result.GetAuthToken()
-
-	// commandClient := GetCommandClient(token)
-
-	// lastOpRevision, err := commandClient.GetLastOpRevision()
 	lastOpRevision, err := sherbet.GetLastOpRevision()
 	if err != nil {
 		log.Fatalln("Error GetLastOpRevision: ", err)
@@ -49,23 +44,17 @@ func main() {
 	prettyResult := fmt.Sprint(greenBold(result.String()))
 	log.Printf("Type: [%T], result: %v\n", result, prettyResult)
 
-	printLoginResult(result)
 	fmt.Printf("GetLastOpRevision = %v\n", greenBold(strconv.FormatInt(lastOpRevision, 10)))
-	fmt.Printf("sherbet.opRevision = %v\n", greenBold(strconv.FormatInt(sherbet.opRevision, 10)))
 
-	// Get X-LS value from response header
-	// Line_X_LS = commandClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-LS")
-	Line_X_LS = sherbet.CommandClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-LS")
+	Line_X_LS := sherbet.CommandClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-LS")
 	fmt.Printf("\nX-LS: [%v]\n", cyanBold(Line_X_LS))
 
-	// profile, err := commandClient.GetProfile()
 	profile, err := sherbet.GetProfile()
 	if err != nil {
 		log.Fatalln("Error GetProfile: ", err)
 	}
 	log.Printf("profile: [%v]\n", cyanBold(profile.String()))
 
-	//allContactIDs, err := commandClient.GetAllContactIds()
 	allContactIDs, err := sherbet.GetAllContactIDs()
 	if err != nil {
 		log.Fatalln("Error GetAllContactIds: ", err)
@@ -119,6 +108,31 @@ func main() {
 		log.Fatalln("Error GetMessageBoxCompactWrapUpList: ", err)
 	}
 	fmt.Println(greenBold("msgboxl: "), "[", msgboxl.GetMessageBoxWrapUpList()[0].String(), "]")
+
+	fmt.Println("--------------------------------------------------------------------------------")
+	try_fetch, err := sherbet.FetchOperations()
+	if err != nil {
+
+		if err.Error() == "HTTP Response code: 410" {
+			log.Printf("410 gone: re-requesing...\n")
+		} else {
+			log.Printf("Error [%v]\n", err.Error())
+		}
+	}
+
+	// Try to fetch
+	for i := 0; i < 10; i++ {
+		fmt.Println("--------------------------------------------------------------------------------")
+		try_fetch, err = sherbet.FetchOperations()
+		if err != nil {
+			if err.Error() == "HTTP Response code: 410" {
+				log.Printf("410 gone: re-requesing...\n")
+			} else {
+				log.Printf("Error [%v]\n", err.Error())
+			}
+		}
+		fmt.Printf("Fetch Result: [%v]\n", try_fetch)
+	}
 	// rmsg, err := sherbet.SendTextMessage("ue2af231f5fe993dda7051b816d072c2c", "สวัสดี ภาษา go ก็รับ Unicode นะ :=")
 	// if err != nil {
 	// 	log.Fatalln("Error Sending Message", err)

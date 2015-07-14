@@ -1,13 +1,10 @@
-package main
+package line2go
 
 import (
-	"fmt"
 	"line2go/linethrift"
 	"line2go/thrift"
 
 	"log"
-
-	"github.com/fatih/color"
 )
 
 type IcecreamClient struct {
@@ -26,6 +23,10 @@ type IcecreamClient struct {
 	authToken  string
 	opRevision int64
 
+	//polling related
+	fetchCount         int32
+	fetchResultChannel chan *FetchResult
+
 	// Returned headers
 	cx_ls_header       string
 	px_ls_header       string
@@ -38,36 +39,9 @@ type IcecreamClient struct {
 	commandClientState bool
 	pollingClientState bool
 }
-
-type ThriftLineService interface {
-	SetHTTPS(bool)
-	GetX_LSHeader() (string, error)
-}
-
-type LoginService interface {
-	Login(string, string) (*line.LoginResult_, error)
-	GetAuthToken() string
-	GetCertificate() string
-}
-
-type PollingService interface {
-	fetch() ([]*line.Operation, error)
-}
-
-type CommandService interface {
-	GetProfile() (line.Profile, error)
-	GetAllContactIDs() ([]string, error)
-	GetAllGroups() ([]string, error)
-	GetContacts(contactIDs []string) (r []*line.Contact, err error)
-	GetMessageHistory(id string) ([]string, error)
-	GetLastOpRevision() (int64, error)
-}
-
-type LineCommunicator interface {
-	ThriftLineService
-	LoginService
-	CommandService
-	PollingService
+type FetchResult struct {
+	ops []*line.Operation
+	err error
 }
 
 func (this *IcecreamClient) NewLoginClient() (client *line.TalkServiceClient) {
@@ -139,17 +113,16 @@ func NewIcecreamClient() (client *IcecreamClient) {
 		pollingURL:         LineThriftServer + LinePollPath,
 		userAgent:          AppUserAgent,
 		x_line_application: LineApplication,
+		fetchCount:         DefaultFetchCount,
 	}
 
+	client.fetchResultChannel = make(chan *FetchResult)
 	client.LoginClient = client.NewLoginClient()
 	client.CommandClient = client.NewCommandClient()
 	client.PollingClient = client.NewPollingClient()
 
 	return
 }
-
-var cyanBold = color.New(color.FgCyan).Add(color.Bold).SprintFunc()
-var greenBold = color.New(color.FgGreen).Add(color.Bold).SprintFunc()
 
 func (client *IcecreamClient) Login(ident string, ptpwd string) (result *line.LoginResult_, err error) {
 	// Parameters:
@@ -194,17 +167,6 @@ func (client *IcecreamClient) setCommandState() {
 func (client *IcecreamClient) setPollingState() {
 	client.px_ls_header = client.PollingClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-LS")
 	setState(&client.pollingClientState)
-}
-
-// Print formatted *line.LoginResult_
-func printLoginResult(result *line.LoginResult_) {
-	fmt.Println("--------------------------------------------------------------------------------")
-	fmt.Printf("token: [%v]\n", cyanBold(result.GetAuthToken()))
-	fmt.Printf("certificate: [%v]\n", cyanBold(result.GetCertificate()))
-	fmt.Printf("pincode: [%v]\n", cyanBold(result.GetPinCode()))
-	fmt.Printf("loginResult: [%v]\n", cyanBold(result.GetTypeA1().String()))
-	fmt.Printf("verifier: [%v]\n", cyanBold(result.GetVerifier()))
-	fmt.Println("--------------------------------------------------------------------------------")
 }
 
 func SetHeaderForClientReuse(client *line.TalkServiceClient, x_ls_header string) {
