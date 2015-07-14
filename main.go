@@ -6,6 +6,8 @@ import (
 	"line2go/linethrift"
 	"line2go/thrift"
 
+	"github.com/fatih/color"
+
 	"log"
 	"os"
 	"strconv"
@@ -13,6 +15,9 @@ import (
 )
 
 var ()
+
+var cyanBold = color.New(color.FgCyan).Add(color.Bold).SprintFunc()
+var greenBold = color.New(color.FgGreen).Add(color.Bold).SprintFunc()
 
 func main() {
 	fmt.Fprintf(ioutil.Discard, "")
