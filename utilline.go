@@ -1,7 +1,6 @@
-package main
+package line2go
 
 import (
-	"fmt"
 	"line2go/linethrift"
 	"line2go/thrift"
 
@@ -168,17 +167,6 @@ func (client *IcecreamClient) setCommandState() {
 func (client *IcecreamClient) setPollingState() {
 	client.px_ls_header = client.PollingClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-LS")
 	setState(&client.pollingClientState)
-}
-
-// Print formatted *line.LoginResult_
-func printLoginResult(result *line.LoginResult_) {
-	fmt.Println("--------------------------------------------------------------------------------")
-	fmt.Printf("token: [%v]\n", cyanBold(result.GetAuthToken()))
-	fmt.Printf("certificate: [%v]\n", cyanBold(result.GetCertificate()))
-	fmt.Printf("pincode: [%v]\n", cyanBold(result.GetPinCode()))
-	fmt.Printf("loginResult: [%v]\n", cyanBold(result.GetTypeA1().String()))
-	fmt.Printf("verifier: [%v]\n", cyanBold(result.GetVerifier()))
-	fmt.Println("--------------------------------------------------------------------------------")
 }
 
 func SetHeaderForClientReuse(client *line.TalkServiceClient, x_ls_header string) {

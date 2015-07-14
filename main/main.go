@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"line2go"
 	"line2go/linethrift"
 	"line2go/thrift"
 
@@ -14,15 +15,13 @@ import (
 	"strings"
 )
 
-var ()
-
 var cyanBold = color.New(color.FgCyan).Add(color.Bold).SprintFunc()
 var greenBold = color.New(color.FgGreen).Add(color.Bold).SprintFunc()
 
 func main() {
 	fmt.Fprintf(ioutil.Discard, "")
 	var err error
-	sherbet := NewIcecreamClient()
+	sherbet := line2go.NewIcecreamClient()
 
 	fmt.Printf("this is sherbet %T:\n[%v]\n", sherbet, sherbet)
 	ident := "choestelus@gmail.com"
@@ -45,9 +44,7 @@ func main() {
 	prettyResult := fmt.Sprint(greenBold(result.String()))
 	log.Printf("Type: [%T], result: %v\n", result, prettyResult)
 
-	printLoginResult(result)
 	fmt.Printf("GetLastOpRevision = %v\n", greenBold(strconv.FormatInt(lastOpRevision, 10)))
-	fmt.Printf("sherbet.opRevision = %v\n", greenBold(strconv.FormatInt(sherbet.opRevision, 10)))
 
 	Line_X_LS := sherbet.CommandClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-LS")
 	fmt.Printf("\nX-LS: [%v]\n", cyanBold(Line_X_LS))

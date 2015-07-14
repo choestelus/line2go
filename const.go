@@ -1,4 +1,4 @@
-package main
+package line2go
 
 const LineThriftServer = "gd2.line.naver.jp"
 const LineOSServer = "os.line.naver.jp"

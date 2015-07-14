@@ -1,4 +1,4 @@
-package main
+package line2go
 
 import "line2go/linethrift"
 
