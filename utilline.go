@@ -6,8 +6,6 @@ import (
 	"line2go/thrift"
 
 	"log"
-
-	"github.com/fatih/color"
 )
 
 type IcecreamClient struct {
@@ -126,9 +124,6 @@ func NewIcecreamClient() (client *IcecreamClient) {
 
 	return
 }
-
-var cyanBold = color.New(color.FgCyan).Add(color.Bold).SprintFunc()
-var greenBold = color.New(color.FgGreen).Add(color.Bold).SprintFunc()
 
 func (client *IcecreamClient) Login(ident string, ptpwd string) (result *line.LoginResult_, err error) {
 	// Parameters:
