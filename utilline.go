@@ -119,6 +119,7 @@ func NewIcecreamClient() (client *IcecreamClient) {
 		fetchCount:         DefaultFetchCount,
 	}
 
+	client.fetchResultChannel = make(chan *FetchResult)
 	client.LoginClient = client.NewLoginClient()
 	client.CommandClient = client.NewCommandClient()
 	client.PollingClient = client.NewPollingClient()
