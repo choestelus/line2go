@@ -15,6 +15,11 @@ func (client *IcecreamClient) FetchOperations() (op []*line.Operation, err error
 	if err != nil {
 		return
 	}
+	for _, element := range op {
+		if client.opRevision < element.GetRevision() {
+			client.opRevision = element.GetRevision()
+		}
+	}
 
 	// begin after section
 	client.setPollingState()
