@@ -106,6 +106,31 @@ func main() {
 		log.Fatalln("Error GetMessageBoxCompactWrapUpList: ", err)
 	}
 	fmt.Println(greenBold("msgboxl: "), "[", msgboxl.GetMessageBoxWrapUpList()[0].String(), "]")
+
+	fmt.Println("--------------------------------------------------------------------------------")
+	try_fetch, err := sherbet.FetchOperations()
+	if err != nil {
+
+		if err.Error() == "HTTP Response code: 410" {
+			log.Printf("410 gone: re-requesing...\n")
+		} else {
+			log.Printf("Error [%v]\n", err.Error())
+		}
+	}
+
+	// Try to fetch
+	for i := 0; i < 10; i++ {
+		fmt.Println("--------------------------------------------------------------------------------")
+		try_fetch, err = sherbet.FetchOperations()
+		if err != nil {
+			if err.Error() == "HTTP Response code: 410" {
+				log.Printf("410 gone: re-requesing...\n")
+			} else {
+				log.Printf("Error [%v]\n", err.Error())
+			}
+		}
+		fmt.Printf("Fetch Result: [%v]\n", try_fetch)
+	}
 	// rmsg, err := sherbet.SendTextMessage("ue2af231f5fe993dda7051b816d072c2c", "สวัสดี ภาษา go ก็รับ Unicode นะ :=")
 	// if err != nil {
 	// 	log.Fatalln("Error Sending Message", err)
