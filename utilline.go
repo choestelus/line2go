@@ -26,7 +26,9 @@ type IcecreamClient struct {
 	authToken  string
 	opRevision int64
 
-	fetchCount int32
+	//polling related
+	fetchCount         int32
+	fetchResultChannel chan *FetchResult
 
 	// Returned headers
 	cx_ls_header       string
@@ -39,6 +41,10 @@ type IcecreamClient struct {
 	// remember state of command client (first use or not), deal with header
 	commandClientState bool
 	pollingClientState bool
+}
+type FetchResult struct {
+	ops []*line.Operation
+	err error
 }
 
 func (this *IcecreamClient) NewLoginClient() (client *line.TalkServiceClient) {
