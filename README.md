@@ -1,11 +1,42 @@
 # line2go
-much wow such line protocol
 
-###Install
-require
-- apache thrift 0.9.2 + get http response manual patch
-- line-thrift generated from line.thrift with
+Package `line2go` provides low level interfaces to LINE Thrift protocol and servers
 
-`$ thrift -r --gen go line.thrift`
+much wow
 
-more documentation coming soon
+such line protocol
+
+
+### Installation
+
+because this is private repository so it can't be installed directly using `go get`
+workaround is:
+
+    $ cd $GOPATH/src
+    $ mkdir github.com/Choestelus/ && cd github.com/Choestelus/line2go
+    $ git clone github.com/Choestelus/line2go
+    $ go install
+
+
+update using:
+
+    git pull
+
+### Documentation
+run `godoc` as background process is recommended
+
+example:
+
+    $ godoc -http=:6060 &
+
+and connect to `http://localhost:6060/pkg/line2go`
+
+
+### Wishlists
+
+ - Ensure data race free
+ - Synchronize via communicating instead of mutexes
+ - More Compact thrift `TCompactProtocol` & `THttpPostClient` (need to be rewritten)
+ - Proper tests
+
+Feedbacks, Issues and pull request are welcome!
