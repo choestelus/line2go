@@ -1,20 +1,34 @@
+// Package line2go provides low level interfaces to LINE Thrift protocol and servers
+//
+// "Icecream" is a placeholder name until a better suit name have met
 package line2go
 
-const LineThriftServer = "gd2.line.naver.jp"
-const LineOSServer = "os.line.naver.jp"
-const LineOSURL = "https://os.line.naver.jp/"
-const LineStickerURL = "http://dl.stickershop.line.naver.jp/products/"
-const LineVerificationURL = "https://gd2.line.naver.jp/Q"
+// LINE service URLs
+const (
+	LineThriftServer    = "gd2.line.naver.jp"
+	LineOSServer        = "os.line.naver.jp"
+	LineOSURL           = "https://os.line.naver.jp/"
+	LineStickerURL      = "http://dl.stickershop.line.naver.jp/products/"
+	LineVerificationURL = "https://gd2.line.naver.jp/Q"
+)
 
-const LineLoginPath = "/api/v4/TalkService.do"
-const LineCommandPath = "/S4"
-const LinePollPath = "/P4"
-const LineShopPath = "/SHOP4"
+// LINE service paths
+const (
+	LineLoginPath   = "/api/v4/TalkService.do"
+	LineCommandPath = "/S4"
+	LinePollPath    = "/P4"
+	LineShopPath    = "/SHOP4"
+)
 
-const LineUserAgent = "purple-line (LINE for libpurple/Pidgin)"
-const LineApplication = "DESKTOPWIN\t3.2.1.83\t\tWINDOWS\t5.1.2600-XP-x64"
+// Header Constants
+const (
+	LineUserAgent   = "purple-line (LINE for libpurple/Pidgin)"
+	LineApplication = "DESKTOPWIN\t3.2.1.83\t\tWINDOWS\t5.1.2600-XP-x64"
+)
 
-const HTTPPrefix = "https://"
-const AppUserAgent = "LINE2Go"
-const PinTimeout = 180 * 1E+9
-const DefaultFetchCount = 50
+// Toggle parameters
+const (
+	HTTPPrefix        = "https://"
+	AppUserAgent      = "LINE2Go"
+	DefaultFetchCount = 50
+)
