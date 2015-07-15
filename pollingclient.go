@@ -1,6 +1,8 @@
 package line2go
 
-import "line2go/linethrift"
+import (
+	"line2go/linethrift"
+)
 
 func (client *IcecreamClient) FetchOperations() (op []*line.Operation, err error) {
 

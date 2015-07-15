@@ -39,12 +39,14 @@ type IcecreamClient struct {
 	commandClientState bool
 	pollingClientState bool
 }
+
+// Type FetchResult is intended to encapsulate result from FetchOperations() for using within channels
 type FetchResult struct {
 	ops []*line.Operation
 	err error
 }
 
-func (this *IcecreamClient) NewLoginClient() (client *line.TalkServiceClient) {
+func (this *IcecreamClient) newLoginClient() (client *line.TalkServiceClient) {
 	// Assuming URL is sanitized
 	loginURL := this.useHTTPS + this.loginURL
 	loginTransport, err := thrift.NewTHttpPostClient(loginURL)
@@ -64,7 +66,7 @@ func (this *IcecreamClient) NewLoginClient() (client *line.TalkServiceClient) {
 	return client
 }
 
-func (this *IcecreamClient) NewCommandClient() (client *line.TalkServiceClient) {
+func (this *IcecreamClient) newCommandClient() (client *line.TalkServiceClient) {
 	// Assuming URL is sanitized
 	commandURL := this.useHTTPS + this.commandURL
 	commandTransport, err := thrift.NewTHttpPostClient(commandURL)
@@ -84,7 +86,7 @@ func (this *IcecreamClient) NewCommandClient() (client *line.TalkServiceClient) 
 	return
 }
 
-func (this *IcecreamClient) NewPollingClient() (client *line.TalkServiceClient) {
+func (this *IcecreamClient) newPollingClient() (client *line.TalkServiceClient) {
 	// Assuming URL is sanitized
 	pollingURL := this.useHTTPS + this.pollingURL
 	pollingTransport, err := thrift.NewTHttpPostClient(pollingURL)
@@ -104,6 +106,7 @@ func (this *IcecreamClient) NewPollingClient() (client *line.TalkServiceClient) 
 	return
 }
 
+// Create new instance of client
 func NewIcecreamClient() (client *IcecreamClient) {
 	// TODO: decoupling from global constant
 	client = &IcecreamClient{
@@ -117,13 +120,14 @@ func NewIcecreamClient() (client *IcecreamClient) {
 	}
 
 	client.fetchResultChannel = make(chan *FetchResult)
-	client.LoginClient = client.NewLoginClient()
-	client.CommandClient = client.NewCommandClient()
-	client.PollingClient = client.NewPollingClient()
+	client.LoginClient = client.newLoginClient()
+	client.CommandClient = client.newCommandClient()
+	client.PollingClient = client.newPollingClient()
 
 	return
 }
 
+// Login with registered E-mail and password
 func (client *IcecreamClient) Login(ident string, ptpwd string) (result *line.LoginResult_, err error) {
 	// Parameters:
 	//  - IdentityProvider
@@ -151,6 +155,11 @@ func (client *IcecreamClient) Login(ident string, ptpwd string) (result *line.Lo
 
 func (client *IcecreamClient) GetAuthToken() string {
 	return client.authToken
+}
+
+// Return current OpRevision value
+func (client *IcecreamClient) GetLocalOpRevision() int64 {
+	return client.opRevision
 }
 
 func setState(state *bool) {
