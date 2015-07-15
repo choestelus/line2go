@@ -52,7 +52,7 @@ type ConfigurableClient struct {
 	headerConfig *sync.Once
 }
 
-func (this *IcecreamClient) newLoginClient() (client *ConfigurableClient) {
+func (this *IcecreamClient) NewLoginClient() (client *ConfigurableClient) {
 	// Assuming URL is sanitized
 	loginURL := this.useHTTPS + this.loginURL
 	loginTransport, err := thrift.NewTHttpPostClient(loginURL)
@@ -73,7 +73,7 @@ func (this *IcecreamClient) newLoginClient() (client *ConfigurableClient) {
 	return
 }
 
-func (this *IcecreamClient) newCommandClient() (client *ConfigurableClient) {
+func (this *IcecreamClient) NewCommandClient() (client *ConfigurableClient) {
 	// Assuming URL is sanitized
 	commandURL := this.useHTTPS + this.commandURL
 	commandTransport, err := thrift.NewTHttpPostClient(commandURL)
@@ -94,7 +94,7 @@ func (this *IcecreamClient) newCommandClient() (client *ConfigurableClient) {
 	return
 }
 
-func (this *IcecreamClient) newPollingClient() (client *ConfigurableClient) {
+func (this *IcecreamClient) NewPollingClient() (client *ConfigurableClient) {
 	// Assuming URL is sanitized
 	pollingURL := this.useHTTPS + this.pollingURL
 	pollingTransport, err := thrift.NewTHttpPostClient(pollingURL)
@@ -116,6 +116,7 @@ func (this *IcecreamClient) newPollingClient() (client *ConfigurableClient) {
 }
 
 // Create new instance of client
+// depends on many constants in package's own
 func NewIcecreamClient() (client *IcecreamClient) {
 	// TODO: decoupling from global constant
 	client = &IcecreamClient{
@@ -129,9 +130,9 @@ func NewIcecreamClient() (client *IcecreamClient) {
 	}
 
 	client.fetchResultChannel = make(chan *FetchResult)
-	client.LoginClient = client.newLoginClient()
-	client.CommandClient = client.newCommandClient()
-	client.PollingClient = client.newPollingClient()
+	client.LoginClient = client.NewLoginClient()
+	client.CommandClient = client.NewCommandClient()
+	client.PollingClient = client.NewPollingClient()
 
 	return
 }
