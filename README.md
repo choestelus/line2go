@@ -13,7 +13,7 @@ because this is private repository so it can't be installed directly using `go g
 workaround is:
 
     $ cd $GOPATH/src
-    $ git clone github.com/Choestelus/line2go
+    $ git clone git@github.com:Choestelus/line2go.git
     $ go install
 
 
