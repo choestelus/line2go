@@ -3,15 +3,16 @@ package line2go
 import (
 	"line2go/linethrift"
 	"line2go/thrift"
+	"sync"
 
 	"log"
 )
 
 type IcecreamClient struct {
 	// A bunch of clients
-	CommandClient *line.TalkServiceClient
-	LoginClient   *line.TalkServiceClient
-	PollingClient *line.TalkServiceClient
+	CommandClient *ConfigurableClient
+	LoginClient   *ConfigurableClient
+	PollingClient *ConfigurableClient
 
 	// URLs & HTTPS
 	useHTTPS   string
@@ -46,7 +47,12 @@ type FetchResult struct {
 	err error
 }
 
-func (this *IcecreamClient) newLoginClient() (client *line.TalkServiceClient) {
+type ConfigurableClient struct {
+	*line.TalkServiceClient
+	headerConfig *sync.Once
+}
+
+func (this *IcecreamClient) newLoginClient() (client *ConfigurableClient) {
 	// Assuming URL is sanitized
 	loginURL := this.useHTTPS + this.loginURL
 	loginTransport, err := thrift.NewTHttpPostClient(loginURL)
@@ -61,12 +67,13 @@ func (this *IcecreamClient) newLoginClient() (client *line.TalkServiceClient) {
 	loginTrans.SetHeader("Connection", "Keep-Alive")
 
 	wrappedLoginTrans := thrift.NewTTransportFactory().GetTransport(loginTrans)
-	client = line.NewTalkServiceClientFactory(wrappedLoginTrans, thrift.NewTCompactProtocolFactory())
+	preclient := line.NewTalkServiceClientFactory(wrappedLoginTrans, thrift.NewTCompactProtocolFactory())
 
-	return client
+	client = &ConfigurableClient{preclient, new(sync.Once)}
+	return
 }
 
-func (this *IcecreamClient) newCommandClient() (client *line.TalkServiceClient) {
+func (this *IcecreamClient) newCommandClient() (client *ConfigurableClient) {
 	// Assuming URL is sanitized
 	commandURL := this.useHTTPS + this.commandURL
 	commandTransport, err := thrift.NewTHttpPostClient(commandURL)
@@ -81,12 +88,13 @@ func (this *IcecreamClient) newCommandClient() (client *line.TalkServiceClient) 
 	commandTrans.SetHeader("Connection", "Keep-Alive")
 
 	wrappedCommandTrans := thrift.NewTTransportFactory().GetTransport(commandTrans)
-	client = line.NewTalkServiceClientFactory(wrappedCommandTrans, thrift.NewTCompactProtocolFactory())
+	preclient := line.NewTalkServiceClientFactory(wrappedCommandTrans, thrift.NewTCompactProtocolFactory())
 
+	client = &ConfigurableClient{preclient, new(sync.Once)}
 	return
 }
 
-func (this *IcecreamClient) newPollingClient() (client *line.TalkServiceClient) {
+func (this *IcecreamClient) newPollingClient() (client *ConfigurableClient) {
 	// Assuming URL is sanitized
 	pollingURL := this.useHTTPS + this.pollingURL
 	pollingTransport, err := thrift.NewTHttpPostClient(pollingURL)
@@ -101,8 +109,9 @@ func (this *IcecreamClient) newPollingClient() (client *line.TalkServiceClient) 
 	pollingTrans.SetHeader("Connection", "Keep-Alive")
 
 	wrappedPollingTrans := thrift.NewTTransportFactory().GetTransport(pollingTrans)
-	client = line.NewTalkServiceClientFactory(wrappedPollingTrans, thrift.NewTCompactProtocolFactory())
+	preclient := line.NewTalkServiceClientFactory(wrappedPollingTrans, thrift.NewTCompactProtocolFactory())
 
+	client = &ConfigurableClient{preclient, new(sync.Once)}
 	return
 }
 
@@ -178,7 +187,7 @@ func (client *IcecreamClient) setPollingState() {
 	setState(&client.pollingClientState)
 }
 
-func SetHeaderForClientReuse(client *line.TalkServiceClient, x_ls_header string) {
+func SetHeaderForClientReuse(client *ConfigurableClient, x_ls_header string) {
 	// Add X-LS request header, remove other unused headers
 	client.Transport.(*thrift.THttpClient).DelHeader("X-Line-Access")
 	client.Transport.(*thrift.THttpClient).DelHeader("User-Agent")
@@ -189,7 +198,7 @@ func SetHeaderForClientReuse(client *line.TalkServiceClient, x_ls_header string)
 	client.Transport.(*thrift.THttpClient).SetHeader("X-LS", x_ls_header)
 }
 
-func SetHeaderForClientInit(client *line.TalkServiceClient, authToken string, userAgent string, x_line_application string) {
+func SetHeaderForClientInit(client *ConfigurableClient, authToken string, userAgent string, x_line_application string) {
 	client.Transport.(*thrift.THttpClient).DelHeader("X-LS")
 	client.Transport.(*thrift.THttpClient).DelHeader("X-Line-Access")
 	client.Transport.(*thrift.THttpClient).DelHeader("User-Agent")
