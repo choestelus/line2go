@@ -1,16 +1,12 @@
 package line2go
 
-import "line2go/linethrift"
+import (
+	"line2go/linethrift"
+	"line2go/thrift"
+)
 
 func (client *IcecreamClient) FetchOperations() (op []*line.Operation, err error) {
 
-	// begin before section
-	if client.pollingClientState == true {
-		SetHeaderForClientReuse(client.PollingClient, client.px_ls_header)
-	} else {
-		SetHeaderForClientInit(client.PollingClient, client.authToken, client.userAgent, client.x_line_application)
-	}
-	// end before section
 	op, err = client.PollingClient.FetchOperations(client.opRevision, client.fetchCount)
 	if err != nil {
 		return
@@ -22,7 +18,10 @@ func (client *IcecreamClient) FetchOperations() (op []*line.Operation, err error
 	}
 
 	// begin after section
-	client.setPollingState()
+	client.PollingClient.headerConfig.Do(func() {
+		client.px_ls_header = client.PollingClient.Transport.(*thrift.THttpClient).GetResponse().Header.Get("X-LS")
+		SetHeaderForClientReuse(client.PollingClient, client.px_ls_header)
+	})
 	// end after section
 	return
 }

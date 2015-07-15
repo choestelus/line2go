@@ -87,12 +87,25 @@ func ContactStatusPtr(v ContactStatus) *ContactStatus { return &v }
 type ContentType int64
 
 const (
-	ContentType_NONE     ContentType = 0
-	ContentType_IMAGE    ContentType = 1
-	ContentType_VIDEO    ContentType = 2
-	ContentType_AUDIO    ContentType = 3
-	ContentType_STICKER  ContentType = 7
-	ContentType_LOCATION ContentType = 15
+	ContentType_NONE             ContentType = 0
+	ContentType_IMAGE            ContentType = 1
+	ContentType_VIDEO            ContentType = 2
+	ContentType_AUDIO            ContentType = 3
+	ContentType_HTML             ContentType = 4
+	ContentType_PDF              ContentType = 5
+	ContentType_CALL             ContentType = 6
+	ContentType_STICKER          ContentType = 7
+	ContentType_PRESENCE         ContentType = 8
+	ContentType_GIFT             ContentType = 9
+	ContentType_GROUPBOARD       ContentType = 10
+	ContentType_APPLINK          ContentType = 11
+	ContentType_LINK             ContentType = 12
+	ContentType_CONTACT          ContentType = 13
+	ContentType_FILE             ContentType = 14
+	ContentType_LOCATION         ContentType = 15
+	ContentType_POSTNOTIFICATION ContentType = 16
+	ContentType_RICH             ContentType = 17
+	ContentType_CHATEVENT        ContentType = 18
 )
 
 func (p ContentType) String() string {
@@ -105,10 +118,36 @@ func (p ContentType) String() string {
 		return "ContentType_VIDEO"
 	case ContentType_AUDIO:
 		return "ContentType_AUDIO"
+	case ContentType_HTML:
+		return "ContentType_HTML"
+	case ContentType_PDF:
+		return "ContentType_PDF"
+	case ContentType_CALL:
+		return "ContentType_CALL"
 	case ContentType_STICKER:
 		return "ContentType_STICKER"
+	case ContentType_PRESENCE:
+		return "ContentType_PRESENCE"
+	case ContentType_GIFT:
+		return "ContentType_GIFT"
+	case ContentType_GROUPBOARD:
+		return "ContentType_GROUPBOARD"
+	case ContentType_APPLINK:
+		return "ContentType_APPLINK"
+	case ContentType_LINK:
+		return "ContentType_LINK"
+	case ContentType_CONTACT:
+		return "ContentType_CONTACT"
+	case ContentType_FILE:
+		return "ContentType_FILE"
 	case ContentType_LOCATION:
 		return "ContentType_LOCATION"
+	case ContentType_POSTNOTIFICATION:
+		return "ContentType_POSTNOTIFICATION"
+	case ContentType_RICH:
+		return "ContentType_RICH"
+	case ContentType_CHATEVENT:
+		return "ContentType_CHATEVENT"
 	}
 	return "<UNSET>"
 }
@@ -123,10 +162,36 @@ func ContentTypeFromString(s string) (ContentType, error) {
 		return ContentType_VIDEO, nil
 	case "ContentType_AUDIO":
 		return ContentType_AUDIO, nil
+	case "ContentType_HTML":
+		return ContentType_HTML, nil
+	case "ContentType_PDF":
+		return ContentType_PDF, nil
+	case "ContentType_CALL":
+		return ContentType_CALL, nil
 	case "ContentType_STICKER":
 		return ContentType_STICKER, nil
+	case "ContentType_PRESENCE":
+		return ContentType_PRESENCE, nil
+	case "ContentType_GIFT":
+		return ContentType_GIFT, nil
+	case "ContentType_GROUPBOARD":
+		return ContentType_GROUPBOARD, nil
+	case "ContentType_APPLINK":
+		return ContentType_APPLINK, nil
+	case "ContentType_LINK":
+		return ContentType_LINK, nil
+	case "ContentType_CONTACT":
+		return ContentType_CONTACT, nil
+	case "ContentType_FILE":
+		return ContentType_FILE, nil
 	case "ContentType_LOCATION":
 		return ContentType_LOCATION, nil
+	case "ContentType_POSTNOTIFICATION":
+		return ContentType_POSTNOTIFICATION, nil
+	case "ContentType_RICH":
+		return ContentType_RICH, nil
+	case "ContentType_CHATEVENT":
+		return ContentType_CHATEVENT, nil
 	}
 	return ContentType(0), fmt.Errorf("not a valid ContentType string")
 }
