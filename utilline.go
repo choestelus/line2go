@@ -131,8 +131,6 @@ func NewIcecreamClient() (client *IcecreamClient) {
 
 	client.fetchResultChannel = make(chan *FetchResult)
 	client.LoginClient = client.NewLoginClient()
-	client.CommandClient = client.NewCommandClient()
-	client.PollingClient = client.NewPollingClient()
 
 	return
 }
@@ -160,6 +158,9 @@ func (client *IcecreamClient) Login(ident string, ptpwd string) (result *line.Lo
 	}
 	log.Println("token from login: ", result.GetAuthToken())
 	client.authToken = result.GetAuthToken()
+	log.Println("token from client: ", client.authToken)
+	client.CommandClient = client.NewCommandClient()
+	client.PollingClient = client.NewPollingClient()
 	return
 }
 
