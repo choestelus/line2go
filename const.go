@@ -23,7 +23,7 @@ const (
 // Header Constants
 const (
 	LineUserAgent   = "purple-line (LINE for libpurple/Pidgin)"
-	LineApplication = "DESKTOPWIN\t3.2.1.83\t\tWINDOWS\t5.1.2600-XP-x64"
+	LineApplication = "DESKTOPWIN\t3.2.1.83\tWINDOWS\t5.1.2600-XP-x64"
 )
 
 // Toggle parameters
