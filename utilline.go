@@ -156,9 +156,7 @@ func (client *IcecreamClient) Login(ident string, ptpwd string) (result *line.Lo
 	if err != nil || result.GetTypeA1() != line.LoginResultType_SUCCESS {
 		return
 	}
-	log.Println("token from login: ", result.GetAuthToken())
 	client.authToken = result.GetAuthToken()
-	log.Println("token from client: ", client.authToken)
 	client.CommandClient = client.NewCommandClient()
 	client.PollingClient = client.NewPollingClient()
 	return
